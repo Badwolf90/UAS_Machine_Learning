@@ -2,10 +2,15 @@ import os
 import joblib
 import pandas as pd
 import numpy as np
+import warnings
+warnings.filterwarnings('ignore')
+
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 from xgboost import XGBClassifier
+
+FEATURE_COLS = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
 
 def run_test_demo():
     print("=" * 60)
@@ -40,12 +45,12 @@ def run_test_demo():
     print("[+] Model Siap Untuk Pengujian!")
 
     # Sampel Pasien Uji 1: Pasien Risiko Tinggi (Sakit Jantung)
-    sample_sakit = np.array([[67.0, 1.0, 4.0, 160.0, 286.0, 0.0, 2.0, 108.0, 1.0, 1.5, 2.0, 3.0, 3.0]])
-    sample_sakit_scaled = scaler.transform(sample_sakit)
+    sample_sakit_df = pd.DataFrame([[67.0, 1.0, 4.0, 160.0, 286.0, 0.0, 2.0, 108.0, 1.0, 1.5, 2.0, 3.0, 3.0]], columns=FEATURE_COLS)
+    sample_sakit_scaled = scaler.transform(sample_sakit_df)
 
     # Sampel Pasien Uji 2: Pasien Risiko Rendah (Sehat)
-    sample_sehat = np.array([[41.0, 0.0, 2.0, 130.0, 204.0, 0.0, 2.0, 172.0, 0.0, 1.4, 1.0, 0.0, 3.0]])
-    sample_sehat_scaled = scaler.transform(sample_sehat)
+    sample_sehat_df = pd.DataFrame([[41.0, 0.0, 2.0, 130.0, 204.0, 0.0, 2.0, 172.0, 0.0, 1.4, 1.0, 0.0, 3.0]], columns=FEATURE_COLS)
+    sample_sehat_scaled = scaler.transform(sample_sehat_df)
 
     print("\n" + "-"*50)
     print(" UJI PREDIKSI 1: PASIEN DENGAN GEJALA BERAT (Risiko Tinggi)")

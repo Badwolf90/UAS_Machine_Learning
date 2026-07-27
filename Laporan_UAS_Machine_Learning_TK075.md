@@ -148,7 +148,7 @@ Berdasarkan model XGBoost, fitur paling berpengaruh dalam memprediksi penyakit j
 
 Sesuai ketentuan petunjuk pengerjaan soal UAS, berikut tautan pendukung yang dapat diakses secara umum:
 
-1. **Link Dataset Kaggle / UCI:** [Dataset Heart Disease Cleveland - Kaggle/UCI](https://archive.ics.uci.edu/ml/datasets/heart+disease)
+1. **Link Dataset Kaggle:** [Kaggle Heart Disease Dataset](https://www.kaggle.com/datasets/johnsmith88/heart-disease-dataset)
 2. **Link Google Colab / Code Repository:** `Heart_Disease_Prediction_UAS.ipynb` (Tersedia dalam direktori project ini dan siap diunggah langsung ke Colab / GitHub)
 3. **Link Video Penjelasan (YouTube / Google Drive):** [https://drive.google.com/file/d/your-video-link-here/view](https://drive.google.com/file/d/your-video-link-here/view) *(Silakan isi link video kelompok Anda)*
 

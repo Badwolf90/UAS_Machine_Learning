@@ -9,3 +9,7 @@ ENV/
 .DS_Store
 instance/
 .pytest_cache/
+notebooks/dataset/
+notebooks/models/
+notebooks/results/
+notebooks/static/

@@ -5,6 +5,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+import warnings
+warnings.filterwarnings('ignore')
+
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
@@ -50,8 +53,8 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 
 # Feature Scaling
 scaler = StandardScaler()
-X_train_scaled = scaler.fit_transform(X_train)
-X_test_scaled = scaler.transform(X_test)
+X_train_scaled = pd.DataFrame(scaler.fit_transform(X_train), columns=X_train.columns)
+X_test_scaled = pd.DataFrame(scaler.transform(X_test), columns=X_test.columns)
 
 # -------------------------------------------------------------
 # 2. EXPERIMENTS: SVM (5 Tuning Runs)

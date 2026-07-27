@@ -3,6 +3,8 @@ import joblib
 import pandas as pd
 import numpy as np
 
+FEATURE_COLS = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
+
 def load_models():
     models_dir = 'models'
     scaler_path = os.path.join(models_dir, 'scaler.joblib')
@@ -19,7 +21,9 @@ def load_models():
     return scaler, svm_model, xgb_model
 
 def predict_patient(scaler, svm_model, xgb_model, features, label_name=""):
-    scaled = scaler.transform([features])
+    input_df = pd.DataFrame([features], columns=FEATURE_COLS)
+    scaled = scaler.transform(input_df)
+    
     svm_prob = svm_model.predict_proba(scaled)[0][1] * 100
     xgb_prob = xgb_model.predict_proba(scaled)[0][1] * 100
 
@@ -29,15 +33,15 @@ def predict_patient(scaler, svm_model, xgb_model, features, label_name=""):
     print(f"\n==================================================")
     print(f" HASIL PREDIKSI: {label_name}")
     print(f"==================================================")
-    print(f"📌 Support Vector Machine (SVM) : {svm_label}")
-    print(f"   └─ Probabilitas Sakit: {svm_prob:.2f}%")
-    print(f"📌 XGBoost Classifier           : {xgb_label}")
-    print(f"   └─ Probabilitas Sakit: {xgb_prob:.2f}%")
+    print(f"[*] Support Vector Machine (SVM) : {svm_label}")
+    print(f"    -> Probabilitas Sakit: {svm_prob:.2f}%")
+    print(f"[*] XGBoost Classifier           : {xgb_label}")
+    print(f"    -> Probabilitas Sakit: {xgb_prob:.2f}%")
     print(f"--------------------------------------------------")
     if svm_prob > 50 or xgb_prob > 50:
-        print("⚠️ Kesimpulan: PASIEN MEMILIKI RISIKO TINGGI PENYAKIT JANTUNG")
+        print("[WARNING] Kesimpulan: PASIEN MEMILIKI RISIKO TINGGI PENYAKIT JANTUNG")
     else:
-        print("✅ Kesimpulan: PASIEN MEMILIKI KONDISI SEHAT / RISIKO RENDAH")
+        print("[OK] Kesimpulan: PASIEN MEMILIKI KONDISI SEHAT / RISIKO RENDAH")
     print(f"==================================================\n")
 
 def interactive_menu():
@@ -58,12 +62,10 @@ def interactive_menu():
         choice = input("Pilih Menu (1-4): ").strip()
 
         if choice == '1':
-            # Age: 67, Sex: 1, CP: 4, Trestbps: 160, Chol: 286, FBS: 0, RestECG: 2, Thalach: 108, Exang: 1, Oldpeak: 1.5, Slope: 2, CA: 3, Thal: 3
             sample = [67.0, 1.0, 4.0, 160.0, 286.0, 0.0, 2.0, 108.0, 1.0, 1.5, 2.0, 3.0, 3.0]
             predict_patient(scaler, svm_model, xgb_model, sample, "Pasien 1 (Risiko Tinggi)")
 
         elif choice == '2':
-            # Age: 41, Sex: 0, CP: 2, Trestbps: 130, Chol: 204, FBS: 0, RestECG: 2, Thalach: 172, Exang: 0, Oldpeak: 1.4, Slope: 1, CA: 0, Thal: 3
             sample = [41.0, 0.0, 2.0, 130.0, 204.0, 0.0, 2.0, 172.0, 0.0, 1.4, 1.0, 0.0, 3.0]
             predict_patient(scaler, svm_model, xgb_model, sample, "Pasien 2 (Risiko Rendah)")
 

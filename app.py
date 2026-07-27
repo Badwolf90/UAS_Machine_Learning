@@ -36,8 +36,9 @@ def predict():
         ca = float(data.get('ca', 0))
         thal = float(data.get('thal', 3))
 
-        input_features = np.array([[age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]])
-        scaled_features = scaler.transform(input_features)
+        feature_cols = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
+        input_df = pd.DataFrame([[age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]], columns=feature_cols)
+        scaled_features = scaler.transform(input_df)
 
         # SVM Prediction
         svm_prob = float(svm_model.predict_proba(scaled_features)[0][1])
