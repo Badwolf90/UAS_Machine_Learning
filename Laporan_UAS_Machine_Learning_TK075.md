@@ -115,7 +115,7 @@ Pengujian dilakukan pada dataset *Heart Disease* (297 sampel pasien dengan 13 fi
 #### **5.1. Perbandingan Progres Eksperimen Hyperparameter Tuning**
 Grafik di bawah ini menggambarkan tren perubahan metrik *Accuracy* dan *F1-Score* di setiap siklus eksperimen tuning (1 sampai 5) untuk SVM dan XGBoost.
 
-![Progres Tuning](hyperparameter_tuning_experiments.png)
+![Progres Tuning](static/images/hyperparameter_tuning_experiments.png)
 
 #### **5.2. Confusion Matrix Model Terbaik**
 Matriks kebingungan menunjukkan rincian prediksi aktual vs prediksi model pada data uji:
@@ -124,14 +124,14 @@ Matriks kebingungan menunjukkan rincian prediksi aktual vs prediksi model pada d
 
 *(Catatan: Dalam dunia medis, XGBoost Exp 4 memiliki keunggulan karena mampu menekan nilai False Negative menjadi hanya 5 pasien).*
 
-![Confusion Matrix](confusion_matrices.png)
+![Confusion Matrix](static/images/confusion_matrices.png)
 
 #### **5.3. Perbandingan Kurva ROC-AUC**
 Kurva ROC-AUC menggambarkan kemampuan diskriminasi model pada berbagai threshold:
 - **Best SVM:** AUC = **0.9609** (Pemisahan kelas sangat sempurna).
 - **Best XGBoost:** AUC = **0.9208** (Pemisahan kelas sangat baik).
 
-![ROC AUC Curve](roc_auc_curves.png)
+![ROC AUC Curve](static/images/roc_auc_curves.png)
 
 #### **5.4. Feature Importance (Tingkat Kepentingan Fitur Medis)**
 Berdasarkan model XGBoost, fitur paling berpengaruh dalam memprediksi penyakit jantung adalah:
@@ -140,7 +140,7 @@ Berdasarkan model XGBoost, fitur paling berpengaruh dalam memprediksi penyakit j
 3. `cp` (Tipe Nyeri Dada / Chest Pain Type)
 4. `oldpeak` (ST depression induced by exercise)
 
-![Feature Importance](feature_importance.png)
+![Feature Importance](static/images/feature_importance.png)
 
 ---
 

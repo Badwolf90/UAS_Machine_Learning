@@ -1,4 +1,5 @@
 import os
+import joblib
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -11,30 +12,32 @@ def run_test_demo():
     print("   TESTING DEMO PREDIKSI PENYAKIT JANTUNG (SVM vs XGBoost)   ")
     print("=" * 60)
 
-    # 1. Load Dataset
+    models_dir = 'models'
     dataset_path = os.path.join('dataset', 'heart.csv')
-    if not os.path.exists(dataset_path):
-        dataset_path = 'heart.csv'
-        
-    df = pd.read_csv(dataset_path)
-    X = df.drop(columns=['target'])
-    y = df['target']
 
-    # Train Test Split & Scale
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
-    scaler = StandardScaler()
-    X_train_scaled = scaler.fit_transform(X_train)
-    X_test_scaled = scaler.transform(X_test)
+    # Load scaler & models if available, or train on the fly
+    if os.path.exists(os.path.join(models_dir, 'svm_model.joblib')):
+        print("[+] Memuat model & scaler dari folder models/...")
+        scaler = joblib.load(os.path.join(models_dir, 'scaler.joblib'))
+        best_svm = joblib.load(os.path.join(models_dir, 'svm_model.joblib'))
+        best_xgb = joblib.load(os.path.join(models_dir, 'xgb_model.joblib'))
+    else:
+        print("[+] Melatih model SVM dan XGBoost...")
+        df = pd.read_csv(dataset_path)
+        X = df.drop(columns=['target'])
+        y = df['target']
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 
-    # Model Terbaik SVM (Linear C=0.01)
-    best_svm = SVC(kernel='linear', C=0.01, probability=True, random_state=42)
-    best_svm.fit(X_train_scaled, y_train)
+        scaler = StandardScaler()
+        X_train_scaled = scaler.fit_transform(X_train)
 
-    # Model Terbaik XGBoost (n_est=200, depth=4, lr=0.05, sub=0.8)
-    best_xgb = XGBClassifier(n_estimators=200, max_depth=4, learning_rate=0.05, subsample=0.8, random_state=42, eval_metric='logloss')
-    best_xgb.fit(X_train_scaled, y_train)
+        best_svm = SVC(kernel='linear', C=0.01, probability=True, random_state=42)
+        best_svm.fit(X_train_scaled, y_train)
 
-    print("\n[+] Model SVM dan XGBoost Berhasil Dilatih!")
+        best_xgb = XGBClassifier(n_estimators=200, max_depth=4, learning_rate=0.05, subsample=0.8, random_state=42, eval_metric='logloss')
+        best_xgb.fit(X_train_scaled, y_train)
+
+    print("[+] Model Siap Untuk Pengujian!")
 
     # Sampel Pasien Uji 1: Pasien Risiko Tinggi (Sakit Jantung)
     sample_sakit = np.array([[67.0, 1.0, 4.0, 160.0, 286.0, 0.0, 2.0, 108.0, 1.0, 1.5, 2.0, 3.0, 3.0]])

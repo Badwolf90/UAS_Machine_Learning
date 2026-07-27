@@ -1,4 +1,5 @@
 import os
+import joblib
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -16,14 +17,12 @@ plt.rcParams.update({'font.sans-serif': 'DejaVu Sans', 'font.size': 11})
 
 # Directory setup
 os.makedirs('dataset', exist_ok=True)
-os.makedirs('images', exist_ok=True)
+os.makedirs(os.path.join('static', 'images'), exist_ok=True)
 os.makedirs('results', exist_ok=True)
+os.makedirs('models', exist_ok=True)
 
 # 1. Load Dataset
 data_path = os.path.join('dataset', 'heart.csv')
-if not os.path.exists(data_path):
-    data_path = 'heart.csv'
-
 df = pd.read_csv(data_path)
 print(f"Dataset Shape: {df.shape}")
 
@@ -139,15 +138,20 @@ print(df_svm_res)
 print("\n--- XGBOOST 5 EXPERIMENTS RESULTS ---")
 print(df_xgb_res)
 
-# Save results to CSV
+# Save results & models
 all_res = pd.concat([df_svm_res, df_xgb_res], ignore_index=True)
 all_res.to_csv(os.path.join('results', 'experiment_results.csv'), index=False)
 
-# -------------------------------------------------------------
-# 4. GENERATE CHARTS
-# -------------------------------------------------------------
+joblib.dump(svm_best_model['model_obj'], os.path.join('models', 'svm_model.joblib'))
+joblib.dump(xgb_best_model['model_obj'], os.path.join('models', 'xgb_model.joblib'))
+joblib.dump(scaler, os.path.join('models', 'scaler.joblib'))
 
-# Chart 1: Experiment Progression (Accuracy & F1-Score across 5 Experiments)
+# -------------------------------------------------------------
+# 4. GENERATE CHARTS (Saved into static/images)
+# -------------------------------------------------------------
+img_dir = os.path.join('static', 'images')
+
+# Chart 1: Experiment Progression
 fig, ax = plt.subplots(1, 2, figsize=(14, 5))
 exps = [1, 2, 3, 4, 5]
 
@@ -172,12 +176,11 @@ ax[1].legend()
 ax[1].grid(True, linestyle='--', alpha=0.6)
 
 plt.tight_layout()
-plt.savefig(os.path.join('images', 'hyperparameter_tuning_experiments.png'), dpi=300)
+plt.savefig(os.path.join(img_dir, 'hyperparameter_tuning_experiments.png'), dpi=300)
 plt.close()
 
-# Chart 2: Confusion Matrices for Best Models
+# Chart 2: Confusion Matrices
 fig, ax = plt.subplots(1, 2, figsize=(12, 5))
-
 cm_svm = confusion_matrix(y_test, svm_best_model['y_pred'])
 cm_xgb = confusion_matrix(y_test, xgb_best_model['y_pred'])
 
@@ -196,12 +199,11 @@ ax[1].set_xticklabels(['Sehat (0)', 'Sakit (1)'])
 ax[1].set_yticklabels(['Sehat (0)', 'Sakit (1)'])
 
 plt.tight_layout()
-plt.savefig(os.path.join('images', 'confusion_matrices.png'), dpi=300)
+plt.savefig(os.path.join(img_dir, 'confusion_matrices.png'), dpi=300)
 plt.close()
 
-# Chart 3: ROC-AUC Curves comparison
+# Chart 3: ROC-AUC Curves
 fig, ax = plt.subplots(figsize=(8, 6))
-
 fpr_svm, tpr_svm, _ = roc_curve(y_test, svm_best_model['y_prob'])
 fpr_xgb, tpr_xgb, _ = roc_curve(y_test, xgb_best_model['y_prob'])
 
@@ -216,10 +218,10 @@ ax.legend(loc='lower right')
 ax.grid(True, linestyle='--', alpha=0.6)
 
 plt.tight_layout()
-plt.savefig(os.path.join('images', 'roc_auc_curves.png'), dpi=300)
+plt.savefig(os.path.join(img_dir, 'roc_auc_curves.png'), dpi=300)
 plt.close()
 
-# Chart 4: Feature Importance (XGBoost)
+# Chart 4: Feature Importance
 importances = xgb_best_model['model_obj'].feature_importances_
 feat_imp = pd.Series(importances, index=X.columns).sort_values(ascending=True)
 
@@ -231,7 +233,7 @@ ax.set_ylabel('Atribut/Fitur Medis')
 ax.grid(True, linestyle='--', alpha=0.6)
 
 plt.tight_layout()
-plt.savefig(os.path.join('images', 'feature_importance.png'), dpi=300)
+plt.savefig(os.path.join(img_dir, 'feature_importance.png'), dpi=300)
 plt.close()
 
-print("\nSUCCESS: All models trained, evaluated, and chart visualizations saved in /images!")
+print("\nSUCCESS: All models trained, evaluated, saved to models/, and charts saved to static/images/!")

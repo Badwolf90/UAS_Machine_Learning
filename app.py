@@ -6,10 +6,11 @@ from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
-# Load trained models & scaler
-scaler = joblib.load('scaler.joblib')
-svm_model = joblib.load('svm_model.joblib')
-xgb_model = joblib.load('xgb_model.joblib')
+# Load trained models & scaler from models/ directory
+models_dir = 'models'
+scaler = joblib.load(os.path.join(models_dir, 'scaler.joblib'))
+svm_model = joblib.load(os.path.join(models_dir, 'svm_model.joblib'))
+xgb_model = joblib.load(os.path.join(models_dir, 'xgb_model.joblib'))
 
 @app.route('/')
 def index():
