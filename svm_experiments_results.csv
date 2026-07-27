@@ -1,0 +1,6 @@
+Experiment,Parameters,Accuracy,Precision,Recall,F1-Score,ROC-AUC
+Exp 1 (SVM Base),"{'kernel': 'linear', 'C': 0.1, 'probability': True, 'random_state': 42}",0.740625,0.7894736842105263,0.7017543859649122,0.7430340557275542,0.824090427410809
+Exp 2 (SVM Tuning 1),"{'kernel': 'linear', 'C': 1.0, 'probability': True, 'random_state': 42}",0.74375,0.7870967741935484,0.7134502923976608,0.7484662576687117,0.8242866674516268
+Exp 3 (SVM Tuning 2),"{'kernel': 'rbf', 'C': 1.0, 'gamma': 'scale', 'probability': True, 'random_state': 42}",0.7625,0.8145695364238411,0.7192982456140351,0.7639751552795031,0.8365124219945838
+Exp 4 (SVM Tuning 3),"{'kernel': 'rbf', 'C': 10.0, 'gamma': 'auto', 'probability': True, 'random_state': 42}",0.771875,0.8141025641025641,0.7426900584795322,0.7767584097859327,0.8524274893049179
+Exp 5 (SVM Optimal),"{'kernel': 'rbf', 'C': 50.0, 'gamma': 'scale', 'probability': True, 'random_state': 42}",0.79375,0.8343949044585988,0.7660818713450293,0.7987804878048781,0.8413006789905413
