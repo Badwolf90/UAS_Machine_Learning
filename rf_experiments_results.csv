@@ -1,6 +1,0 @@
-Experiment,Parameters,Accuracy,Precision,Recall,F1-Score,ROC-AUC
-Exp 1 (RF Base),"{'n_estimators': 10, 'max_depth': 3, 'random_state': 42}",0.74375,0.779874213836478,0.7251461988304093,0.7515151515151515,0.8237175713332548
-Exp 2 (RF Tuning 1),"{'n_estimators': 50, 'max_depth': 5, 'random_state': 42}",0.7625,0.802547770700637,0.7368421052631579,0.7682926829268293,0.8347070136190589
-Exp 3 (RF Tuning 2),"{'n_estimators': 100, 'max_depth': 10, 'criterion': 'entropy', 'random_state': 42}",0.803125,0.8253012048192772,0.8011695906432749,0.8130563798219584,0.8834334157541505
-Exp 4 (RF Tuning 3),"{'n_estimators': 200, 'max_depth': 15, 'min_samples_split': 5, 'random_state': 42}",0.796875,0.8117647058823529,0.8070175438596491,0.8093841642228738,0.8946975940970996
-Exp 5 (RF Optimal),"{'n_estimators': 300, 'max_depth': 20, 'min_samples_split': 2, 'criterion': 'entropy', 'random_state': 42}",0.796875,0.8154761904761905,0.8011695906432749,0.8082595870206489,0.903842379999215

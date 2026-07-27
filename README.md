@@ -1,6 +1,6 @@
 # 🍷 WineQuality AI - Aplikasi Prediksi & Diagnosis Kualitas Red Wine
 
-Proyek ini adalah **Aplikasi Web Interaktif berbasis Machine Learning** untuk melakukan pengujian dan klasifikasi kualitas minuman anggur merah (*Red Wine Quality*) berdasarkan 11 parameter fisikokimia laboratorium. Proyek ini dikembangkan sebagai **Laporan Final Project Ujian Akhir Semester (UAS) Machine Learning (TK075)** di **Universitas Amikom Yogyakarta**.
+Proyek ini adalah **Aplikasi Web Interaktif berbasis Machine Learning** untuk melakukan pengujian dan klasifikasi kualitas minuman anggur merah (*Red Wine Quality*) berdasarkan 11 parameter fisikokimia laboratorium. Proyek ini dikembangkan menggunakan Python (Flask) sebagai backend, HTML/CSS/JS dengan desain modern Glassmorphism di frontend, serta library Scikit-Learn untuk pemodelan prediksinya.
 
 ---
 
@@ -70,20 +70,10 @@ UAS_MACHINE_LEARNING/
 ├── scaler.joblib                        # Fitted StandardScaler
 ├── model_info.txt                       # Catatan Performa Model Terpilih
 ├── requirements.txt                     # Daftar Library Python yang Dipakai
-│
-├── Laporan_UAS_Machine_Learning.pdf     # Laporan UAS Resmi Siap Cetak (PDF)
-├── Laporan_UAS_Machine_Learning.docx    # Laporan UAS Format Word (.docx)
-├── Laporan_UAS_Machine_Learning.md      # Laporan UAS Format Markdown
+├── .gitignore                           # Git ignore configuration
+├── README.md                            # Dokumentasi Proyek Lengkap
 └── Tugas_UAS_Machine_Learning.ipynb     # Jupyter Notebook Google Colab
 ```
-
----
-
-## 📑 Berkas Laporan Resmi UAS
-
-* 📄 **[Laporan PDF Resmi](Laporan_UAS_Machine_Learning.pdf)**: Dokumen laporan 7 halaman lengkap dengan Cover, Latar Belakang, Cara Kerja Algoritma, Tabel 5x Eksperimen, Diagram Visualisasi, dan Tabel Kontribusi Tim.
-* 📝 **[Laporan Word (.docx)](Laporan_UAS_Machine_Learning.docx)**: File Word untuk mengedit nama/NIM secara langsung.
-* 📓 **[Jupyter Notebook Colab (.ipynb)](Tugas_UAS_Machine_Learning.ipynb)**: Notebook Python siap dijalankan di Google Colab.
 
 ---
 © 2026 Universitas Amikom Yogyakarta | Program Studi Teknik Komputer
