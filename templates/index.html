@@ -154,35 +154,99 @@
 
         </div>
 
-        <!-- Evaluation Charts Section -->
+        <!-- Evaluation Charts Section with Zoom & Download Features -->
         <section class="glass-card section-charts">
             <div class="card-title"><i class="fa-solid fa-chart-area"></i> Visualisasi & Evaluasi 5x Hyperparameter Tuning</div>
             <div class="charts-grid">
+                
                 <div class="chart-card">
-                    <h4><i class="fa-solid fa-arrow-trend-up"></i> Diagram Perbandingan 5x Tuning</h4>
-                    <img src="{{ url_for('static', filename='images/hyperparameter_tuning_experiments.png') }}" alt="Experiments Chart">
+                    <div class="chart-header">
+                        <h4><i class="fa-solid fa-arrow-trend-up"></i> Diagram Perbandingan 5x Tuning</h4>
+                        <div class="chart-actions">
+                            <button class="btn-action" onclick="openModal('{{ url_for('static', filename='images/hyperparameter_tuning_experiments.png') }}', 'Diagram Perbandingan 5x Tuning')">
+                                <i class="fa-solid fa-expand"></i> Zoom
+                            </button>
+                            <a class="btn-action download" href="{{ url_for('static', filename='images/hyperparameter_tuning_experiments.png') }}" download="hyperparameter_tuning_experiments.png">
+                                <i class="fa-solid fa-download"></i> Unduh
+                            </a>
+                        </div>
+                    </div>
+                    <img src="{{ url_for('static', filename='images/hyperparameter_tuning_experiments.png') }}" alt="Experiments Chart" class="zoomable" onclick="openModal(this.src, 'Diagram Perbandingan 5x Tuning')">
                 </div>
+
                 <div class="chart-card">
-                    <h4><i class="fa-solid fa-table-cells"></i> Confusion Matrix Model Terbaik</h4>
-                    <img src="{{ url_for('static', filename='images/confusion_matrices.png') }}" alt="Confusion Matrices">
+                    <div class="chart-header">
+                        <h4><i class="fa-solid fa-table-cells"></i> Confusion Matrix Model Terbaik</h4>
+                        <div class="chart-actions">
+                            <button class="btn-action" onclick="openModal('{{ url_for('static', filename='images/confusion_matrices.png') }}', 'Confusion Matrix Model Terbaik')">
+                                <i class="fa-solid fa-expand"></i> Zoom
+                            </button>
+                            <a class="btn-action download" href="{{ url_for('static', filename='images/confusion_matrices.png') }}" download="confusion_matrices.png">
+                                <i class="fa-solid fa-download"></i> Unduh
+                            </a>
+                        </div>
+                    </div>
+                    <img src="{{ url_for('static', filename='images/confusion_matrices.png') }}" alt="Confusion Matrices" class="zoomable" onclick="openModal(this.src, 'Confusion Matrix Model Terbaik')">
                 </div>
+
                 <div class="chart-card">
-                    <h4><i class="fa-solid fa-chart-line"></i> Perbandingan Kurva ROC-AUC</h4>
-                    <img src="{{ url_for('static', filename='images/roc_auc_curves.png') }}" alt="ROC Curve">
+                    <div class="chart-header">
+                        <h4><i class="fa-solid fa-chart-line"></i> Perbandingan Kurva ROC-AUC</h4>
+                        <div class="chart-actions">
+                            <button class="btn-action" onclick="openModal('{{ url_for('static', filename='images/roc_auc_curves.png') }}', 'Perbandingan Kurva ROC-AUC')">
+                                <i class="fa-solid fa-expand"></i> Zoom
+                            </button>
+                            <a class="btn-action download" href="{{ url_for('static', filename='images/roc_auc_curves.png') }}" download="roc_auc_curves.png">
+                                <i class="fa-solid fa-download"></i> Unduh
+                            </a>
+                        </div>
+                    </div>
+                    <img src="{{ url_for('static', filename='images/roc_auc_curves.png') }}" alt="ROC Curve" class="zoomable" onclick="openModal(this.src, 'Perbandingan Kurva ROC-AUC')">
                 </div>
+
                 <div class="chart-card">
-                    <h4><i class="fa-solid fa-list-check"></i> Feature Importance (XGBoost)</h4>
-                    <img src="{{ url_for('static', filename='images/feature_importance.png') }}" alt="Feature Importance">
+                    <div class="chart-header">
+                        <h4><i class="fa-solid fa-list-check"></i> Feature Importance (XGBoost)</h4>
+                        <div class="chart-actions">
+                            <button class="btn-action" onclick="openModal('{{ url_for('static', filename='images/feature_importance.png') }}', 'Feature Importance (XGBoost)')">
+                                <i class="fa-solid fa-expand"></i> Zoom
+                            </button>
+                            <a class="btn-action download" href="{{ url_for('static', filename='images/feature_importance.png') }}" download="feature_importance.png">
+                                <i class="fa-solid fa-download"></i> Unduh
+                            </a>
+                        </div>
+                    </div>
+                    <img src="{{ url_for('static', filename='images/feature_importance.png') }}" alt="Feature Importance" class="zoomable" onclick="openModal(this.src, 'Feature Importance (XGBoost)')">
                 </div>
+
             </div>
         </section>
     </main>
+
+    <!-- Lightbox Zoom Modal Overlay -->
+    <div id="imageModal" class="modal-overlay" onclick="closeModal(event)">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="modalTitle">Preview Gambar</h3>
+                <div class="modal-actions">
+                    <a id="modalDownload" href="#" download class="btn-submit" style="width: auto; padding: 0.4rem 1rem; font-size: 0.85rem;">
+                        <i class="fa-solid fa-download"></i> Download HD
+                    </a>
+                    <button class="btn-close" onclick="forceCloseModal()"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <img id="modalImg" src="" alt="Enlarged View">
+            </div>
+        </div>
+    </div>
 
     <footer class="footer">
         <p>&copy; 2026 HeartGuard ML - Universitas Amikom Yogyakarta</p>
     </footer>
 
     <script>
+        // Form Submission Handler
         document.getElementById('predictionForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const formData = new FormData(this);
@@ -217,6 +281,43 @@
                 }
             } catch (err) {
                 alert('Terjadi kesalahan saat memproses prediksi!');
+            }
+        });
+
+        // Zoom Modal Handlers
+        function openModal(imgSrc, title) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImg');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalDownload = document.getElementById('modalDownload');
+
+            modalImg.src = imgSrc;
+            modalTitle.innerText = title;
+            modalDownload.href = imgSrc;
+            
+            // Extract filename
+            const filename = imgSrc.substring(imgSrc.lastIndexOf('/') + 1);
+            modalDownload.setAttribute('download', filename);
+
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                forceCloseModal();
+            }
+        }
+
+        function forceCloseModal() {
+            const modal = document.getElementById('imageModal');
+            modal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                forceCloseModal();
             }
         });
     </script>
