@@ -11,9 +11,24 @@ from sklearn.svm import SVC
 from xgboost import XGBClassifier
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score, confusion_matrix, roc_curve
 
-# Set aesthetic styling
-sns.set_theme(style="whitegrid")
-plt.rcParams.update({'font.sans-serif': 'DejaVu Sans', 'font.size': 11})
+# Configure Vercel & Notion Style Dark Theme for Matplotlib
+plt.style.use('dark_background')
+plt.rcParams.update({
+    'font.sans-serif': ['DejaVu Sans', 'Arial', 'sans-serif'],
+    'font.size': 11,
+    'figure.facecolor': '#0a0a0c',
+    'axes.facecolor': '#121216',
+    'axes.edgecolor': '#27272a',
+    'axes.labelcolor': '#ededed',
+    'xtick.color': '#a1a1aa',
+    'ytick.color': '#a1a1aa',
+    'grid.color': '#27272a',
+    'grid.linestyle': '--',
+    'grid.alpha': 0.5,
+    'text.color': '#ededed',
+    'savefig.facecolor': '#0a0a0c',
+    'savefig.edgecolor': '#0a0a0c'
+})
 
 # Directory setup
 os.makedirs('dataset', exist_ok=True)
@@ -133,11 +148,6 @@ for item in xgb_experiments:
 df_svm_res = pd.DataFrame(svm_results).drop(columns=['model_obj', 'y_pred', 'y_prob'])
 df_xgb_res = pd.DataFrame(xgb_results).drop(columns=['model_obj', 'y_pred', 'y_prob'])
 
-print("--- SVM 5 EXPERIMENTS RESULTS ---")
-print(df_svm_res)
-print("\n--- XGBOOST 5 EXPERIMENTS RESULTS ---")
-print(df_xgb_res)
-
 # Save results & models
 all_res = pd.concat([df_svm_res, df_xgb_res], ignore_index=True)
 all_res.to_csv(os.path.join('results', 'experiment_results.csv'), index=False)
@@ -147,78 +157,78 @@ joblib.dump(xgb_best_model['model_obj'], os.path.join('models', 'xgb_model.jobli
 joblib.dump(scaler, os.path.join('models', 'scaler.joblib'))
 
 # -------------------------------------------------------------
-# 4. GENERATE CHARTS (Saved into static/images)
+# 4. GENERATE VERCEL / NOTION STYLE CHARTS
 # -------------------------------------------------------------
 img_dir = os.path.join('static', 'images')
 
 # Chart 1: Experiment Progression
-fig, ax = plt.subplots(1, 2, figsize=(14, 5))
+fig, ax = plt.subplots(1, 2, figsize=(14, 5.5))
 exps = [1, 2, 3, 4, 5]
 
-ax[0].plot(exps, df_svm_res['Accuracy'], marker='o', linewidth=2.5, label='SVM Accuracy', color='#3498db')
-ax[0].plot(exps, df_xgb_res['Accuracy'], marker='s', linewidth=2.5, label='XGBoost Accuracy', color='#e74c3c')
-ax[0].set_title('Eksperimen Hyperparameter Tuning vs Accuracy', fontsize=13, fontweight='bold')
-ax[0].set_xlabel('Nomor Eksperimen (1 - 5)')
-ax[0].set_ylabel('Accuracy')
+ax[0].plot(exps, df_svm_res['Accuracy'], marker='o', markersize=8, linewidth=2.5, label='SVM Accuracy', color='#0070f3')
+ax[0].plot(exps, df_xgb_res['Accuracy'], marker='s', markersize=8, linewidth=2.5, label='XGBoost Accuracy', color='#ff0080')
+ax[0].set_title('Tuning Progress vs Accuracy', fontsize=13, fontweight='bold', pad=12)
+ax[0].set_xlabel('Experiment Run (1 - 5)')
+ax[0].set_ylabel('Accuracy Score')
 ax[0].set_xticks(exps)
 ax[0].set_ylim(0.70, 0.95)
-ax[0].legend()
-ax[0].grid(True, linestyle='--', alpha=0.6)
+ax[0].legend(frameon=True, facecolor='#18181b', edgecolor='#27272a')
+ax[0].grid(True)
 
-ax[1].plot(exps, df_svm_res['F1-Score'], marker='o', linewidth=2.5, label='SVM F1-Score', color='#2ecc71')
-ax[1].plot(exps, df_xgb_res['F1-Score'], marker='s', linewidth=2.5, label='XGBoost F1-Score', color='#9b59b6')
-ax[1].set_title('Eksperimen Hyperparameter Tuning vs F1-Score', fontsize=13, fontweight='bold')
-ax[1].set_xlabel('Nomor Eksperimen (1 - 5)')
+ax[1].plot(exps, df_svm_res['F1-Score'], marker='o', markersize=8, linewidth=2.5, label='SVM F1-Score', color='#50e3c2')
+ax[1].plot(exps, df_xgb_res['F1-Score'], marker='s', markersize=8, linewidth=2.5, label='XGBoost F1-Score', color='#7928ca')
+ax[1].set_title('Tuning Progress vs F1-Score', fontsize=13, fontweight='bold', pad=12)
+ax[1].set_xlabel('Experiment Run (1 - 5)')
 ax[1].set_ylabel('F1-Score')
 ax[1].set_xticks(exps)
 ax[1].set_ylim(0.70, 0.95)
-ax[1].legend()
-ax[1].grid(True, linestyle='--', alpha=0.6)
+ax[1].legend(frameon=True, facecolor='#18181b', edgecolor='#27272a')
+ax[1].grid(True)
 
 plt.tight_layout()
-plt.savefig(os.path.join(img_dir, 'hyperparameter_tuning_experiments.png'), dpi=300)
+plt.savefig(os.path.join(img_dir, 'hyperparameter_tuning_experiments.png'), dpi=300, bbox_inches='tight')
 plt.close()
 
 # Chart 2: Confusion Matrices
-fig, ax = plt.subplots(1, 2, figsize=(12, 5))
+fig, ax = plt.subplots(1, 2, figsize=(12, 5.5))
 cm_svm = confusion_matrix(y_test, svm_best_model['y_pred'])
 cm_xgb = confusion_matrix(y_test, xgb_best_model['y_pred'])
 
-sns.heatmap(cm_svm, annot=True, fmt='d', cmap='Blues', ax=ax[0], cbar=False, annot_kws={"size": 16, "weight": "bold"})
-ax[0].set_title(f"Confusion Matrix: Best SVM\n({svm_best_model['Config']})", fontsize=12, fontweight='bold')
+sns.heatmap(cm_svm, annot=True, fmt='d', cmap='Blues', ax=ax[0], cbar=False, annot_kws={"size": 18, "weight": "bold", "color": "#ffffff"})
+ax[0].set_title(f"Confusion Matrix: Best SVM\n({svm_best_model['Config']})", fontsize=12, fontweight='bold', pad=12)
 ax[0].set_xlabel('Predicted Label')
 ax[0].set_ylabel('True Label')
 ax[0].set_xticklabels(['Sehat (0)', 'Sakit (1)'])
 ax[0].set_yticklabels(['Sehat (0)', 'Sakit (1)'])
 
-sns.heatmap(cm_xgb, annot=True, fmt='d', cmap='Reds', ax=ax[1], cbar=False, annot_kws={"size": 16, "weight": "bold"})
-ax[1].set_title(f"Confusion Matrix: Best XGBoost\n({xgb_best_model['Config']})", fontsize=12, fontweight='bold')
+sns.heatmap(cm_xgb, annot=True, fmt='d', cmap='Purples', ax=ax[1], cbar=False, annot_kws={"size": 18, "weight": "bold", "color": "#ffffff"})
+ax[1].set_title(f"Confusion Matrix: Best XGBoost\n({xgb_best_model['Config']})", fontsize=12, fontweight='bold', pad=12)
 ax[1].set_xlabel('Predicted Label')
 ax[1].set_ylabel('True Label')
 ax[1].set_xticklabels(['Sehat (0)', 'Sakit (1)'])
 ax[1].set_yticklabels(['Sehat (0)', 'Sakit (1)'])
 
 plt.tight_layout()
-plt.savefig(os.path.join(img_dir, 'confusion_matrices.png'), dpi=300)
+plt.savefig(os.path.join(img_dir, 'confusion_matrices.png'), dpi=300, bbox_inches='tight')
 plt.close()
 
 # Chart 3: ROC-AUC Curves
-fig, ax = plt.subplots(figsize=(8, 6))
+fig, ax = plt.subplots(figsize=(8.5, 6))
 fpr_svm, tpr_svm, _ = roc_curve(y_test, svm_best_model['y_prob'])
 fpr_xgb, tpr_xgb, _ = roc_curve(y_test, xgb_best_model['y_prob'])
 
-ax.plot(fpr_svm, tpr_svm, label=f"Best SVM (AUC = {svm_best_model['ROC-AUC']:.4f})", color='#2980b9', linewidth=2.5)
-ax.plot(fpr_xgb, tpr_xgb, label=f"Best XGBoost (AUC = {xgb_best_model['ROC-AUC']:.4f})", color='#c0392b', linewidth=2.5)
-ax.plot([0, 1], [0, 1], 'k--', label='Baseline / Random Guest', alpha=0.6)
+ax.plot(fpr_svm, tpr_svm, label=f"Best SVM (AUC = {svm_best_model['ROC-AUC']:.4f})", color='#0070f3', linewidth=3)
+ax.plot(fpr_xgb, tpr_xgb, label=f"Best XGBoost (AUC = {xgb_best_model['ROC-AUC']:.4f})", color='#ff0080', linewidth=3)
+ax.plot([0, 1], [0, 1], 'k--', label='Baseline / Random Classifier', color='#71717a', linewidth=1.5)
 
-ax.set_title('Perbandingan Kurva ROC-AUC (Best SVM vs Best XGBoost)', fontsize=13, fontweight='bold')
+ax.set_title('Perbandingan Kurva ROC-AUC (Vercel Dark Theme)', fontsize=13, fontweight='bold', pad=12)
 ax.set_xlabel('False Positive Rate (1 - Specificity)')
 ax.set_ylabel('True Positive Rate (Sensitivity / Recall)')
-ax.legend(loc='lower right')
-ax.grid(True, linestyle='--', alpha=0.6)
+ax.legend(loc='lower right', frameon=True, facecolor='#18181b', edgecolor='#27272a')
+ax.grid(True)
 
 plt.tight_layout()
-plt.savefig(os.path.join(img_dir, 'roc_auc_curves.png'), dpi=300)
+plt.savefig(os.path.join(img_dir, 'roc_auc_curves.png'), dpi=300, bbox_inches='tight')
 plt.close()
 
 # Chart 4: Feature Importance
@@ -226,14 +236,14 @@ importances = xgb_best_model['model_obj'].feature_importances_
 feat_imp = pd.Series(importances, index=X.columns).sort_values(ascending=True)
 
 fig, ax = plt.subplots(figsize=(9, 6))
-feat_imp.plot(kind='barh', color='#8e44ad', ax=ax)
-ax.set_title('Tingkat Kepentingan Fitur (Feature Importance - XGBoost)', fontsize=13, fontweight='bold')
+bars = feat_imp.plot(kind='barh', color='#50e3c2', ax=ax, width=0.7)
+ax.set_title('Feature Importance Analysis (XGBoost)', fontsize=13, fontweight='bold', pad=12)
 ax.set_xlabel('Importance Score')
-ax.set_ylabel('Atribut/Fitur Medis')
-ax.grid(True, linestyle='--', alpha=0.6)
+ax.set_ylabel('Atribut Medis')
+ax.grid(True)
 
 plt.tight_layout()
-plt.savefig(os.path.join(img_dir, 'feature_importance.png'), dpi=300)
+plt.savefig(os.path.join(img_dir, 'feature_importance.png'), dpi=300, bbox_inches='tight')
 plt.close()
 
-print("\nSUCCESS: All models trained, evaluated, saved to models/, and charts saved to static/images/!")
+print("\nSUCCESS: All models trained and Vercel & Notion styled charts saved to static/images/!")

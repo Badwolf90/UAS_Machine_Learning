@@ -3,36 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HeartGuard ML - Machine Learning UAS Project</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>HeartGuard ML - Intelligent Cardiovascular Diagnostic Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <div class="background-glob glob-1"></div>
-    <div class="background-glob glob-2"></div>
+    <div class="ambient-glow glow-top"></div>
+    <div class="ambient-glow glow-bottom"></div>
 
     <header class="navbar">
         <div class="logo">
-            <i class="fa-solid fa-heart-pulse logo-icon"></i>
+            <i class="fa-solid fa-heart-pulse"></i>
             <span>HeartGuard <strong>ML</strong></span>
         </div>
         <div class="badge-tag">UAS Machine Learning (TK075)</div>
     </header>
 
     <main class="container">
-        <!-- Hero Section -->
+        <!-- Vercel-Style Hero -->
         <section class="hero-card">
             <h1>Deteksi Dini Penyakit Jantung berbasis AI</h1>
-            <p>Sistem klasifikasi prediktif cerdas menggunakan <strong>Support Vector Machine (SVM)</strong> dan <strong>XGBoost Classifier</strong> dengan pengujian 5x Hyperparameter Tuning.</p>
+            <p>Platform diagnostik prediktif presisi tinggi menggunakan <strong>Support Vector Machine (SVM)</strong> dan <strong>XGBoost Classifier</strong> dengan 5x Hyperparameter Tuning.</p>
         </section>
 
         <!-- Main Dashboard Grid -->
         <div class="dashboard-grid">
 
-            <!-- Form Inputs -->
-            <div class="glass-card form-card">
-                <h2><i class="fa-solid fa-user-doctor"></i> Input Rekam Medis Pasien</h2>
+            <!-- Input Form -->
+            <div class="glass-card">
+                <div class="card-title"><i class="fa-solid fa-notes-medical"></i> Input Indikator Medis Pasien</div>
                 <form id="predictionForm">
                     <div class="form-grid">
                         <div class="input-group">
@@ -42,8 +42,8 @@
                         <div class="input-group">
                             <label>Jenis Kelamin</label>
                             <select name="sex" required>
-                                <option value="1">Laki-laki</option>
-                                <option value="0">Perempuan</option>
+                                <option value="1">Laki-laki (1)</option>
+                                <option value="0">Perempuan (0)</option>
                             </select>
                         </div>
                         <div class="input-group">
@@ -56,7 +56,7 @@
                             </select>
                         </div>
                         <div class="input-group">
-                            <label>Tekanan Darah Istirahat (mmHg)</label>
+                            <label>Tekanan Darah (mmHg)</label>
                             <input type="number" name="trestbps" value="140" required>
                         </div>
                         <div class="input-group">
@@ -119,18 +119,18 @@
                             </select>
                         </div>
                     </div>
-                    <button type="submit" class="btn-primary">
-                        <i class="fa-solid fa-calculator"></i> Analisis Prediksi Risko
+                    <button type="submit" class="btn-submit">
+                        <i class="fa-solid fa-microchip"></i> Analisis Prediksi Risko
                     </button>
                 </form>
             </div>
 
-            <!-- Prediction Results -->
-            <div class="glass-card result-card" id="resultContainer">
-                <h2><i class="fa-solid fa-chart-pie"></i> Hasil Prediksi Model AI</h2>
+            <!-- Prediction Output Card -->
+            <div class="glass-card">
+                <div class="card-title"><i class="fa-solid fa-chart-pie"></i> Hasil Prediksi Model AI</div>
                 <div class="result-placeholder" id="placeholder">
-                    <i class="fa-solid fa-laptop-medical"></i>
-                    <p>Masukkan data rekam medis di sebelah kiri dan klik <strong>Analisis Prediksi Risiko</strong>.</p>
+                    <i class="fa-solid fa-stethoscope"></i>
+                    <p>Isi indikator medis di sebelah kiri lalu klik <strong>Analisis Prediksi Risiko</strong> untuk melihat hasil.</p>
                 </div>
                 <div class="result-content" id="resultContent" style="display: none;">
                     <div class="verdict-banner" id="verdictBanner">
@@ -138,15 +138,15 @@
                     </div>
 
                     <div class="model-comparison">
-                        <div class="model-box svm-box">
-                            <div class="model-name"><i class="fa-solid fa-microchip"></i> Support Vector Machine</div>
-                            <div class="model-label" id="svmLabel">POSITIF</div>
-                            <div class="model-prob">Probabilitas: <span id="svmProb">0%</span></div>
+                        <div class="model-card">
+                            <div class="model-name"><i class="fa-solid fa-shield-halved"></i> Support Vector Machine</div>
+                            <div class="model-val" id="svmLabel">POSITIF</div>
+                            <div class="model-prob">Estimasi Probabilitas: <span id="svmProb">0%</span></div>
                         </div>
-                        <div class="model-box xgb-box">
+                        <div class="model-card">
                             <div class="model-name"><i class="fa-solid fa-bolt"></i> XGBoost Classifier</div>
-                            <div class="model-label" id="xgbLabel">POSITIF</div>
-                            <div class="model-prob">Probabilitas: <span id="xgbProb">0%</span></div>
+                            <div class="model-val" id="xgbLabel">POSITIF</div>
+                            <div class="model-prob">Estimasi Probabilitas: <span id="xgbProb">0%</span></div>
                         </div>
                     </div>
                 </div>
@@ -156,30 +156,30 @@
 
         <!-- Evaluation Charts Section -->
         <section class="glass-card section-charts">
-            <h2><i class="fa-solid fa-chart-line"></i> Visualisasi & Evaluasi 5x Hyperparameter Tuning</h2>
+            <div class="card-title"><i class="fa-solid fa-chart-area"></i> Visualisasi & Evaluasi 5x Hyperparameter Tuning</div>
             <div class="charts-grid">
-                <div class="chart-item">
-                    <h4>Diagram Perbandingan 5x Tuning</h4>
-                    <img src="{{ url_for('static', filename='images/hyperparameter_tuning_experiments.png') }}" alt="Experiments Chart" onerror="this.src='/images/hyperparameter_tuning_experiments.png'">
+                <div class="chart-card">
+                    <h4><i class="fa-solid fa-arrow-trend-up"></i> Diagram Perbandingan 5x Tuning</h4>
+                    <img src="{{ url_for('static', filename='images/hyperparameter_tuning_experiments.png') }}" alt="Experiments Chart">
                 </div>
-                <div class="chart-item">
-                    <h4>Confusion Matrix Model Terbaik</h4>
-                    <img src="{{ url_for('static', filename='images/confusion_matrices.png') }}" alt="Confusion Matrices" onerror="this.src='/images/confusion_matrices.png'">
+                <div class="chart-card">
+                    <h4><i class="fa-solid fa-table-cells"></i> Confusion Matrix Model Terbaik</h4>
+                    <img src="{{ url_for('static', filename='images/confusion_matrices.png') }}" alt="Confusion Matrices">
                 </div>
-                <div class="chart-item">
-                    <h4>Perbandingan Kurva ROC-AUC</h4>
-                    <img src="{{ url_for('static', filename='images/roc_auc_curves.png') }}" alt="ROC Curve" onerror="this.src='/images/roc_auc_curves.png'">
+                <div class="chart-card">
+                    <h4><i class="fa-solid fa-chart-line"></i> Perbandingan Kurva ROC-AUC</h4>
+                    <img src="{{ url_for('static', filename='images/roc_auc_curves.png') }}" alt="ROC Curve">
                 </div>
-                <div class="chart-item">
-                    <h4>Feature Importance (XGBoost)</h4>
-                    <img src="{{ url_for('static', filename='images/feature_importance.png') }}" alt="Feature Importance" onerror="this.src='/images/feature_importance.png'">
+                <div class="chart-card">
+                    <h4><i class="fa-solid fa-list-check"></i> Feature Importance (XGBoost)</h4>
+                    <img src="{{ url_for('static', filename='images/feature_importance.png') }}" alt="Feature Importance">
                 </div>
             </div>
         </section>
     </main>
 
     <footer class="footer">
-        <p>&copy; 2026 Ujian Akhir Semester Machine Learning (TK075) - Universitas Amikom Yogyakarta</p>
+        <p>&copy; 2026 HeartGuard ML - Universitas Amikom Yogyakarta</p>
     </footer>
 
     <script>
@@ -203,10 +203,10 @@
 
                     if (res.summary.risk_level === 'Tinggi') {
                         banner.className = 'verdict-banner danger';
-                        verdictText.innerText = '⚠️ RISK LEVEL: TINGGI (Sakit Jantung)';
+                        verdictText.innerText = '⚠️ RISK LEVEL: TINGGI (Indikasi Penyakit Jantung)';
                     } else {
                         banner.className = 'verdict-banner success';
-                        verdictText.innerText = '✅ RISK LEVEL: RENDAH (Kondisi Sehat)';
+                        verdictText.innerText = '✅ RISK LEVEL: RENDAH (Kondisi Normal)';
                     }
 
                     document.getElementById('svmLabel').innerText = res.svm.label;
