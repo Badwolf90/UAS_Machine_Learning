@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WineQuality AI - Prediksi & Diagnosis Kualitas Minuman</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="brand">
+            <i class="fa-solid fa-wine-glass-empty brand-icon"></i>
+            <span>WineQuality AI</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#" class="active" onclick="switchTab('predict')"><i class="fa-solid fa-flask"></i> Uji Prediksi</a></li>
+            <li><a href="#" onclick="switchTab('insights')"><i class="fa-solid fa-chart-line"></i> Insights Model</a></li>
+            <li><a href="#" onclick="switchTab('docs')"><i class="fa-solid fa-file-pdf"></i> Laporan UAS</a></li>
+        </ul>
+    </nav>
+
+    <div class="container">
+        <!-- HERO HEADER -->
+        <header class="hero-header">
+            <span class="hero-badge"><i class="fa-solid fa-brain"></i> Machine Learning Classification</span>
+            <h1 class="hero-title">Sistem Prediksi Kualitas Red Wine</h1>
+            <p class="hero-subtitle">Platform analisis komputasi laboratorium untuk memprediksi dan mengklasifikasikan kualitas minuman Red Wine berbasis atribut fisikokimia menggunakan Random Forest & SVM.</p>
+        </header>
+
+        <!-- TABS NAV -->
+        <div class="tab-container">
+            <button class="tab-btn active" id="btn-predict" onclick="switchTab('predict')">
+                <i class="fa-solid fa-sliders"></i> Input Parameter Medis & Kimia
+            </button>
+            <button class="tab-btn" id="btn-insights" onclick="switchTab('insights')">
+                <i class="fa-solid fa-chart-pie"></i> Visualisasi Evaluasi Model
+            </button>
+            <button class="tab-btn" id="btn-docs" onclick="switchTab('docs')">
+                <i class="fa-solid fa-download"></i> Unduh Laporan PDF & Code
+            </button>
+        </div>
+
+        <!-- TAB 1: PREDICTION FORM & RESULT -->
+        <div id="tab-predict" class="tab-content active">
+            <div class="app-grid">
+                <!-- FORM CARD -->
+                <div class="glass-card">
+                    <h2 class="card-title"><i class="fa-solid fa-vial"></i> Parameter Fisikokimia Wine</h2>
+                    <form id="predictionForm" onsubmit="handlePredict(event)">
+                        <div class="form-grid">
+                            <div class="input-group">
+                                <label for="fixed_acidity">Fixed Acidity (g/L)</label>
+                                <input type="number" step="0.1" id="fixed_acidity" class="input-control" value="7.4" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="volatile_acidity">Volatile Acidity (g/L)</label>
+                                <input type="number" step="0.01" id="volatile_acidity" class="input-control" value="0.70" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="citric_acid">Citric Acid (g/L)</label>
+                                <input type="number" step="0.01" id="citric_acid" class="input-control" value="0.00" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="residual_sugar">Residual Sugar (g/L)</label>
+                                <input type="number" step="0.1" id="residual_sugar" class="input-control" value="1.9" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="chlorides">Chlorides (g/L)</label>
+                                <input type="number" step="0.001" id="chlorides" class="input-control" value="0.076" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="free_sulfur_dioxide">Free Sulfur Dioxide (mg/L)</label>
+                                <input type="number" step="1" id="free_sulfur_dioxide" class="input-control" value="11" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="total_sulfur_dioxide">Total Sulfur Dioxide (mg/L)</label>
+                                <input type="number" step="1" id="total_sulfur_dioxide" class="input-control" value="34" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="density">Density (g/cm³)</label>
+                                <input type="number" step="0.0001" id="density" class="input-control" value="0.9978" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="ph">pH Level</label>
+                                <input type="number" step="0.01" id="ph" class="input-control" value="3.51" required>
+                            </div>
+                            <div class="input-group">
+                                <label for="sulphates">Sulphates (g/L)</label>
+                                <input type="number" step="0.01" id="sulphates" class="input-control" value="0.56" required>
+                            </div>
+                            <div class="input-group" style="grid-column: span 2;">
+                                <label for="alcohol">Alcohol Percentage (% vol)</label>
+                                <input type="number" step="0.1" id="alcohol" class="input-control" value="9.4" required>
+                            </div>
+                            <button type="submit" class="btn-submit">
+                                <i class="fa-solid fa-microchip"></i> Analisis & Prediksi Kualitas
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- RESULT CARD -->
+                <div class="glass-card result-card">
+                    <h2 class="card-title"><i class="fa-solid fa-chart-bar"></i> Hasil Diagnostik AI</h2>
+                    <div id="resultContent">
+                        <i class="fa-solid fa-wine-glass" style="font-size: 3.5rem; color: var(--text-muted); margin: 1rem 0;"></i>
+                        <p style="color: var(--text-muted);">Tekan tombol <b>Analisis & Prediksi Kualitas</b> untuk menampilkan hasil pemodelan Machine Learning.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 2: INSIGHTS & CHARTS -->
+        <div id="tab-insights" class="tab-content">
+            <div class="metrics-grid">
+                <div class="chart-card">
+                    <h3 style="color:#58a6ff;"><i class="fa-solid fa-table-cells"></i> Confusion Matrix Comparison</h3>
+                    <img src="{{ url_for('static', filename='images/confusion_matrix.png') }}" alt="Confusion Matrix">
+                </div>
+                <div class="chart-card">
+                    <h3 style="color:#3fb950;"><i class="fa-solid fa-chart-line"></i> Kurva ROC-AUC</h3>
+                    <img src="{{ url_for('static', filename='images/roc_curve.png') }}" alt="ROC Curve">
+                </div>
+                <div class="chart-card">
+                    <h3 style="color:#a855f7;"><i class="fa-solid fa-bars-staggered"></i> Feature Importance (Random Forest)</h3>
+                    <img src="{{ url_for('static', filename='images/feature_importance.png') }}" alt="Feature Importance">
+                </div>
+                <div class="chart-card">
+                    <h3 style="color:#ff3b5c;"><i class="fa-solid fa-vial-circle-check"></i> Perkembangan 5x Eksperimen Tuning</h3>
+                    <img src="{{ url_for('static', filename='images/experiments_comparison.png') }}" alt="5 Experiments Comparison">
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: DOCS & DOWNLOADS -->
+        <div id="tab-docs" class="tab-content">
+            <div class="glass-card">
+                <h2 class="card-title"><i class="fa-solid fa-folder-open"></i> Berkas & Laporan Tugas UAS</h2>
+                <p style="margin-bottom: 1.5rem; color: var(--text-muted);">Seluruh dokumen laporan dan kode sumber telah dibuat dan tersimpan di dalam repository GitHub:</p>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem;">
+                    <a href="https://github.com/Badwolf90/UAS_Machine_Learning/raw/main/Laporan_UAS_Machine_Learning.pdf" target="_blank" style="text-decoration:none; padding:1.2rem; background:rgba(239, 68, 68, 0.15); border:1px solid #ef4444; border-radius:12px; color:#ffffff; font-weight:700; display:flex; align-items:center; gap:0.8rem;">
+                        <i class="fa-solid fa-file-pdf" style="font-size:1.8rem; color:#ef4444;"></i> Unduh Laporan PDF Siap Cetak
+                    </a>
+                    <a href="https://github.com/Badwolf90/UAS_Machine_Learning/raw/main/Laporan_UAS_Machine_Learning.docx" target="_blank" style="text-decoration:none; padding:1.2rem; background:rgba(59, 130, 246, 0.15); border:1px solid #3b82f6; border-radius:12px; color:#ffffff; font-weight:700; display:flex; align-items:center; gap:0.8rem;">
+                        <i class="fa-solid fa-file-word" style="font-size:1.8rem; color:#3b82f6;"></i> Unduh Laporan Word (.docx)
+                    </a>
+                    <a href="https://github.com/Badwolf90/UAS_Machine_Learning/blob/main/Tugas_UAS_Machine_Learning.ipynb" target="_blank" style="text-decoration:none; padding:1.2rem; background:rgba(245, 158, 11, 0.15); border:1px solid #f59e0b; border-radius:12px; color:#ffffff; font-weight:700; display:flex; align-items:center; gap:0.8rem;">
+                        <i class="fa-solid fa-book-open" style="font-size:1.8rem; color:#f59e0b;"></i> Buka Notebook Colab (.ipynb)
+                    </a>
+                    <a href="https://github.com/Badwolf90/UAS_Machine_Learning" target="_blank" style="text-decoration:none; padding:1.2rem; background:rgba(168, 85, 247, 0.15); border:1px solid #a855f7; border-radius:12px; color:#ffffff; font-weight:700; display:flex; align-items:center; gap:0.8rem;">
+                        <i class="fa-brands fa-github" style="font-size:1.8rem; color:#a855f7;"></i> Lihat Repository GitHub Full Code
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 WineQuality AI | Final Project UAS Machine Learning (TK075) - Universitas Amikom Yogyakarta</p>
+    </footer>
+
+    <!-- SCRIPT -->
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            
+            document.getElementById('tab-' + tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('active');
+        }
+
+        async function handlePredict(e) {
+            e.preventDefault();
+            const btn = document.querySelector('.btn-submit');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses Analisis...';
+            
+            const payload = {
+                fixed_acidity: document.getElementById('fixed_acidity').value,
+                volatile_acidity: document.getElementById('volatile_acidity').value,
+                citric_acid: document.getElementById('citric_acid').value,
+                residual_sugar: document.getElementById('residual_sugar').value,
+                chlorides: document.getElementById('chlorides').value,
+                free_sulfur_dioxide: document.getElementById('free_sulfur_dioxide').value,
+                total_sulfur_dioxide: document.getElementById('total_sulfur_dioxide').value,
+                density: document.getElementById('density').value,
+                ph: document.getElementById('ph').value,
+                sulphates: document.getElementById('sulphates').value,
+                alcohol: document.getElementById('alcohol').value
+            };
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+                
+                if(result.status === 'success') {
+                    const isHigh = result.prediction === 1;
+                    const badgeClass = isHigh ? 'badge-high' : 'badge-standard';
+                    const icon = isHigh ? 'fa-circle-check' : 'fa-triangle-exclamation';
+                    
+                    let recHtml = '';
+                    result.recommendations.forEach(r => {
+                        recHtml += `<div class="rec-item"><i class="fa-solid fa-lightbulb" style="color: var(--accent-red); margin-right: 6px;"></i> ${r}</div>`;
+                    });
+
+                    document.getElementById('resultContent').innerHTML = `
+                        <div class="prediction-badge ${badgeClass}">
+                            <i class="fa-solid ${icon}"></i> ${result.quality_label}
+                        </div>
+                        <div style="margin: 1rem 0;">
+                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-muted);">
+                                <span>Peluang Kualitas Tinggi</span>
+                                <b>${result.prob_high}%</b>
+                            </div>
+                            <div class="prob-meter">
+                                <div class="prob-fill" style="width: ${result.prob_high}%;"></div>
+                            </div>
+                        </div>
+                        <div class="rec-list">
+                            <h4 style="font-size: 1rem; margin-bottom: 0.6rem; color: #ffffff;"><i class="fa-solid fa-clipboard-check"></i> Rekomendasi Laboratorium:</h4>
+                            ${recHtml}
+                        </div>
+                    `;
+                }
+            } catch (err) {
+                alert("Gagal melakukan prediksi: " + err);
+            } finally {
+                btn.innerHTML = '<i class="fa-solid fa-microchip"></i> Analisis & Prediksi Kualitas';
+            }
+        }
+    </script>
+</body>
+</html>
