@@ -3,217 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WineQuality AI - Prediksi & Diagnosis Kualitas Minuman</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>HeartCare AI - Machine Learning UAS Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+    <div class="background-glob glob-1"></div>
+    <div class="background-glob glob-2"></div>
 
-    <!-- NAVBAR -->
-    <nav class="navbar">
-        <div class="brand">
-            <i class="fa-solid fa-wine-glass-empty brand-icon"></i>
-            <span>WineQuality AI</span>
+    <header class="navbar">
+        <div class="logo">
+            <i class="fa-solid fa-heart-pulse logo-icon"></i>
+            <span>HeartCare <strong>AI</strong></span>
         </div>
-        <ul class="nav-links">
-            <li><a href="#" class="active" id="nav-predict" onclick="switchTab('predict')"><i class="fa-solid fa-flask"></i> Uji Prediksi</a></li>
-            <li><a href="#" id="nav-insights" onclick="switchTab('insights')"><i class="fa-solid fa-chart-line"></i> Insights Model</a></li>
-        </ul>
-    </nav>
+        <div class="badge-tag">UAS Machine Learning (TK075)</div>
+    </header>
 
-    <div class="container">
-        <!-- HERO HEADER -->
-        <header class="hero-header">
-            <span class="hero-badge"><i class="fa-solid fa-brain"></i> Machine Learning Classification</span>
-            <h1 class="hero-title">Sistem Prediksi Kualitas Red Wine</h1>
-            <p class="hero-subtitle">Platform analisis komputasi laboratorium untuk memprediksi dan mengklasifikasikan kualitas minuman Red Wine berbasis atribut fisikokimia menggunakan Random Forest & SVM.</p>
-        </header>
+    <main class="container">
+        <!-- Hero Section -->
+        <section class="hero-card">
+            <h1>Deteksi Dini Penyakit Jantung berbasis AI</h1>
+            <p>Sistem klasifikasi prediktif cerdas menggunakan <strong>Support Vector Machine (SVM)</strong> dan <strong>XGBoost Classifier</strong> dengan pengujian 5x Hyperparameter Tuning.</p>
+        </section>
 
-        <!-- TABS NAV -->
-        <div class="tab-container">
-            <button class="tab-btn active" id="btn-predict" onclick="switchTab('predict')">
-                <i class="fa-solid fa-sliders"></i> Input Parameter Medis & Kimia
-            </button>
-            <button class="tab-btn" id="btn-insights" onclick="switchTab('insights')">
-                <i class="fa-solid fa-chart-pie"></i> Visualisasi Evaluasi Model
-            </button>
-        </div>
+        <!-- Main Dashboard Grid -->
+        <div class="dashboard-grid">
 
-        <!-- TAB 1: PREDICTION FORM & RESULT -->
-        <div id="tab-predict" class="tab-content active">
-            <div class="app-grid">
-                <!-- FORM CARD -->
-                <div class="glass-card">
-                    <h2 class="card-title"><i class="fa-solid fa-vial"></i> Parameter Fisikokimia Wine</h2>
-                    <form id="predictionForm" onsubmit="handlePredict(event)">
-                        <div class="form-grid">
-                            <div class="input-group">
-                                <label for="fixed_acidity">Fixed Acidity (g/L)</label>
-                                <input type="number" step="0.1" id="fixed_acidity" class="input-control" value="7.4" required>
-                            </div>
-                            <div class="input-group">
-                                <label for="volatile_acidity">Volatile Acidity (g/L)</label>
-                                <input type="number" step="0.01" id="volatile_acidity" class="input-control" value="0.70" required>
-                            </div>
-                            <div class="input-group">
-                                <label for="citric_acid">Citric Acid (g/L)</label>
-                                <input type="number" step="0.01" id="citric_acid" class="input-control" value="0.00" required>
-                            </div>
-                            <div class="input-group">
-                                <label for="residual_sugar">Residual Sugar (g/L)</label>
-                                <input type="number" step="0.1" id="residual_sugar" class="input-control" value="1.9" required>
-                            </div>
-                            <div class="input-group">
-                                <label for="chlorides">Chlorides (g/L)</label>
-                                <input type="number" step="0.001" id="chlorides" class="input-control" value="0.076" required>
-                            </div>
-                            <div class="input-group">
-                                <label for="free_sulfur_dioxide">Free Sulfur Dioxide (mg/L)</label>
-                                <input type="number" step="1" id="free_sulfur_dioxide" class="input-control" value="11" required>
-                            </div>
-                            <div class="input-group">
-                                <label for="total_sulfur_dioxide">Total Sulfur Dioxide (mg/L)</label>
-                                <input type="number" step="1" id="total_sulfur_dioxide" class="input-control" value="34" required>
-                            </div>
-                            <div class="input-group">
-                                <label for="density">Density (g/cm³)</label>
-                                <input type="number" step="0.0001" id="density" class="input-control" value="0.9978" required>
-                            </div>
-                            <div class="input-group">
-                                <label for="ph">pH Level</label>
-                                <input type="number" step="0.01" id="ph" class="input-control" value="3.51" required>
-                            </div>
-                            <div class="input-group">
-                                <label for="sulphates">Sulphates (g/L)</label>
-                                <input type="number" step="0.01" id="sulphates" class="input-control" value="0.56" required>
-                            </div>
-                            <div class="input-group" style="grid-column: span 2;">
-                                <label for="alcohol">Alcohol Percentage (% vol)</label>
-                                <input type="number" step="0.1" id="alcohol" class="input-control" value="9.4" required>
-                            </div>
-                            <button type="submit" class="btn-submit">
-                                <i class="fa-solid fa-microchip"></i> Analisis & Prediksi Kualitas
-                            </button>
+            <!-- Form Inputs -->
+            <div class="glass-card form-card">
+                <h2><i class="fa-solid fa-user-doctor"></i> Input Rekam Medis Pasien</h2>
+                <form id="predictionForm">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>Usia (Tahun)</label>
+                            <input type="number" name="age" value="55" min="18" max="100" required>
                         </div>
-                    </form>
-                </div>
+                        <div class="input-group">
+                            <label>Jenis Kelamin</label>
+                            <select name="sex" required>
+                                <option value="1">Laki-laki</option>
+                                <option value="0">Perempuan</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Tipe Nyeri Dada (Chest Pain)</label>
+                            <select name="cp" required>
+                                <option value="1">Typical Angina (1)</option>
+                                <option value="2">Atypical Angina (2)</option>
+                                <option value="3">Non-anginal Pain (3)</option>
+                                <option value="4" selected>Asymptomatic (4)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Tekanan Darah Istirahat (mmHg)</label>
+                            <input type="number" name="trestbps" value="140" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Kolesterol Serum (mg/dl)</label>
+                            <input type="number" name="chol" value="240" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Gula Darah Puasa > 120 mg/dl</label>
+                            <select name="fbs" required>
+                                <option value="0" selected>Tidak (0)</option>
+                                <option value="1">Ya (1)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Hasil ECG Istirahat</label>
+                            <select name="restecg" required>
+                                <option value="0" selected>Normal (0)</option>
+                                <option value="1">ST-T Wave Abnormality (1)</option>
+                                <option value="2">Left Ventricular Hypertrophy (2)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Detak Jantung Maks (bpm)</label>
+                            <input type="number" name="thalach" value="140" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Angina Akibat Olahraga</label>
+                            <select name="exang" required>
+                                <option value="0" selected>Tidak (0)</option>
+                                <option value="1">Ya (1)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Depresi ST (Oldpeak)</label>
+                            <input type="number" step="0.1" name="oldpeak" value="1.5" required>
+                        </div>
+                        <div class="input-group">
+                            <label>Kemiringan ST (Slope)</label>
+                            <select name="slope" required>
+                                <option value="1">Upsloping (1)</option>
+                                <option value="2" selected>Flat (2)</option>
+                                <option value="3">Downsloping (3)</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Jumlah Pembuluh Utama (CA)</label>
+                            <select name="ca" required>
+                                <option value="0">0</option>
+                                <option value="1" selected>1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Thalassemia</label>
+                            <select name="thal" required>
+                                <option value="3">Normal (3)</option>
+                                <option value="6">Fixed Defect (6)</option>
+                                <option value="7" selected>Reversable Defect (7)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">
+                        <i class="fa-solid fa-calculator"></i> Analisis Prediksi Risko
+                    </button>
+                </form>
+            </div>
 
-                <!-- RESULT CARD -->
-                <div class="glass-card result-card">
-                    <h2 class="card-title"><i class="fa-solid fa-chart-bar"></i> Hasil Diagnostik AI</h2>
-                    <div id="resultContent">
-                        <i class="fa-solid fa-wine-glass" style="font-size: 3.5rem; color: var(--text-muted); margin: 1rem 0;"></i>
-                        <p style="color: var(--text-muted);">Tekan tombol <b>Analisis & Prediksi Kualitas</b> untuk menampilkan hasil pemodelan Machine Learning.</p>
+            <!-- Prediction Results -->
+            <div class="glass-card result-card" id="resultContainer">
+                <h2><i class="fa-solid fa-chart-pie"></i> Hasil Prediksi Model AI</h2>
+                <div class="result-placeholder" id="placeholder">
+                    <i class="fa-solid fa-laptop-medical"></i>
+                    <p>Masukkan data rekam medis di sebelah kiri dan klik <strong>Analisis Prediksi Risiko</strong>.</p>
+                </div>
+                <div class="result-content" id="resultContent" style="display: none;">
+                    <div class="verdict-banner" id="verdictBanner">
+                        <span id="verdictText">RISIKO TINGGI</span>
+                    </div>
+
+                    <div class="model-comparison">
+                        <div class="model-box svm-box">
+                            <div class="model-name"><i class="fa-solid fa-microchip"></i> Support Vector Machine</div>
+                            <div class="model-label" id="svmLabel">POSITIF</div>
+                            <div class="model-prob">Probabilitas: <span id="svmProb">0%</span></div>
+                        </div>
+                        <div class="model-box xgb-box">
+                            <div class="model-name"><i class="fa-solid fa-bolt"></i> XGBoost Classifier</div>
+                            <div class="model-label" id="xgbLabel">POSITIF</div>
+                            <div class="model-prob">Probabilitas: <span id="xgbProb">0%</span></div>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
 
-        <!-- TAB 2: INSIGHTS & CHARTS -->
-        <div id="tab-insights" class="tab-content">
-            <div class="metrics-grid">
-                <div class="chart-card">
-                    <h3 style="color:#58a6ff;"><i class="fa-solid fa-table-cells"></i> Confusion Matrix Comparison</h3>
-                    <img src="{{ url_for('static', filename='images/confusion_matrix.png') }}" alt="Confusion Matrix">
+        <!-- Evaluation Charts Section -->
+        <section class="glass-card section-charts">
+            <h2><i class="fa-solid fa-chart-line"></i> Visualisasi & Evaluasi 5x Hyperparameter Tuning</h2>
+            <div class="charts-grid">
+                <div class="chart-item">
+                    <h4>Diagram Perbandingan 5x Tuning</h4>
+                    <img src="{{ url_for('static', filename='images/hyperparameter_tuning_experiments.png') }}" alt="Experiments Chart" onerror="this.src='/images/hyperparameter_tuning_experiments.png'">
                 </div>
-                <div class="chart-card">
-                    <h3 style="color:#3fb950;"><i class="fa-solid fa-chart-line"></i> Kurva ROC-AUC</h3>
-                    <img src="{{ url_for('static', filename='images/roc_curve.png') }}" alt="ROC Curve">
+                <div class="chart-item">
+                    <h4>Confusion Matrix Model Terbaik</h4>
+                    <img src="{{ url_for('static', filename='images/confusion_matrices.png') }}" alt="Confusion Matrices" onerror="this.src='/images/confusion_matrices.png'">
                 </div>
-                <div class="chart-card">
-                    <h3 style="color:#a855f7;"><i class="fa-solid fa-bars-staggered"></i> Feature Importance (Random Forest)</h3>
-                    <img src="{{ url_for('static', filename='images/feature_importance.png') }}" alt="Feature Importance">
+                <div class="chart-item">
+                    <h4>Perbandingan Kurva ROC-AUC</h4>
+                    <img src="{{ url_for('static', filename='images/roc_auc_curves.png') }}" alt="ROC Curve" onerror="this.src='/images/roc_auc_curves.png'">
                 </div>
-                <div class="chart-card">
-                    <h3 style="color:#ff3b5c;"><i class="fa-solid fa-vial-circle-check"></i> Perkembangan 5x Eksperimen Tuning</h3>
-                    <img src="{{ url_for('static', filename='images/experiments_comparison.png') }}" alt="5 Experiments Comparison">
+                <div class="chart-item">
+                    <h4>Feature Importance (XGBoost)</h4>
+                    <img src="{{ url_for('static', filename='images/feature_importance.png') }}" alt="Feature Importance" onerror="this.src='/images/feature_importance.png'">
                 </div>
             </div>
-        </div>
+        </section>
+    </main>
 
-    </div>
-
-    <!-- FOOTER -->
-    <footer>
-        <p>&copy; 2026 WineQuality AI | Interactive Machine Learning Web Application</p>
+    <footer class="footer">
+        <p>&copy; 2026 Ujian Akhir Semester Machine Learning (TK075) - Universitas Amikom Yogyakarta</p>
     </footer>
 
-    <!-- SCRIPT -->
     <script>
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-links a').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById('tab-' + tabId).classList.add('active');
-            document.getElementById('btn-' + tabId).classList.add('active');
-            if(document.getElementById('nav-' + tabId)) {
-                document.getElementById('nav-' + tabId).classList.add('active');
-            }
-        }
-
-        async function handlePredict(e) {
+        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            const btn = document.querySelector('.btn-submit');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses Analisis...';
+            const formData = new FormData(this);
             
-            const payload = {
-                fixed_acidity: document.getElementById('fixed_acidity').value,
-                volatile_acidity: document.getElementById('volatile_acidity').value,
-                citric_acid: document.getElementById('citric_acid').value,
-                residual_sugar: document.getElementById('residual_sugar').value,
-                chlorides: document.getElementById('chlorides').value,
-                free_sulfur_dioxide: document.getElementById('free_sulfur_dioxide').value,
-                total_sulfur_dioxide: document.getElementById('total_sulfur_dioxide').value,
-                density: document.getElementById('density').value,
-                ph: document.getElementById('ph').value,
-                sulphates: document.getElementById('sulphates').value,
-                alcohol: document.getElementById('alcohol').value
-            };
-
             try {
                 const response = await fetch('/predict', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: formData
                 });
-                const result = await response.json();
+                const res = await response.json();
                 
-                if(result.status === 'success') {
-                    const isHigh = result.prediction === 1;
-                    const badgeClass = isHigh ? 'badge-high' : 'badge-standard';
-                    const icon = isHigh ? 'fa-circle-check' : 'fa-triangle-exclamation';
-                    
-                    let recHtml = '';
-                    result.recommendations.forEach(r => {
-                        recHtml += `<div class="rec-item"><i class="fa-solid fa-lightbulb" style="color: var(--accent-red); margin-right: 6px;"></i> ${r}</div>`;
-                    });
+                if (res.status === 'success') {
+                    document.getElementById('placeholder').style.display = 'none';
+                    document.getElementById('resultContent').style.display = 'block';
 
-                    document.getElementById('resultContent').innerHTML = `
-                        <div class="prediction-badge ${badgeClass}">
-                            <i class="fa-solid ${icon}"></i> ${result.quality_label}
-                        </div>
-                        <div style="margin: 1rem 0;">
-                            <div style="display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-muted);">
-                                <span>Peluang Kualitas Tinggi</span>
-                                <b>${result.prob_high}%</b>
-                            </div>
-                            <div class="prob-meter">
-                                <div class="prob-fill" style="width: ${result.prob_high}%;"></div>
-                            </div>
-                        </div>
-                        <div class="rec-list">
-                            <h4 style="font-size: 1rem; margin-bottom: 0.6rem; color: #ffffff;"><i class="fa-solid fa-clipboard-check"></i> Rekomendasi Laboratorium:</h4>
-                            ${recHtml}
-                        </div>
-                    `;
+                    const banner = document.getElementById('verdictBanner');
+                    const verdictText = document.getElementById('verdictText');
+
+                    if (res.summary.risk_level === 'Tinggi') {
+                        banner.className = 'verdict-banner danger';
+                        verdictText.innerText = '⚠️ RISK LEVEL: TINGGI (Sakit Jantung)';
+                    } else {
+                        banner.className = 'verdict-banner success';
+                        verdictText.innerText = '✅ RISK LEVEL: RENDAH (Kondisi Sehat)';
+                    }
+
+                    document.getElementById('svmLabel').innerText = res.svm.label;
+                    document.getElementById('svmProb').innerText = res.svm.probability + '%';
+
+                    document.getElementById('xgbLabel').innerText = res.xgb.label;
+                    document.getElementById('xgbProb').innerText = res.xgb.probability + '%';
                 }
             } catch (err) {
-                alert("Gagal melakukan prediksi: " + err);
-            } finally {
-                btn.innerHTML = '<i class="fa-solid fa-microchip"></i> Analisis & Prediksi Kualitas';
+                alert('Terjadi kesalahan saat memproses prediksi!');
             }
-        }
+        });
     </script>
 </body>
 </html>

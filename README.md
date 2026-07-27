@@ -1,79 +1,47 @@
-# 🍷 WineQuality AI - Aplikasi Prediksi & Diagnosis Kualitas Red Wine
+# UAS Machine Learning (TK075) - Deteksi Dini Penyakit Jantung (SVM vs XGBoost)
 
-Proyek ini adalah **Aplikasi Web Interaktif berbasis Machine Learning** untuk melakukan pengujian dan klasifikasi kualitas minuman anggur merah (*Red Wine Quality*) berdasarkan 11 parameter fisikokimia laboratorium. Proyek ini dikembangkan menggunakan Python (Flask) sebagai backend, HTML/CSS/JS dengan desain modern Glassmorphism di frontend, serta library Scikit-Learn untuk pemodelan prediksinya.
-
----
-
-## 🚀 Fitur Utama
-
-1. **Interactive Assessment**: Form input dinamis untuk memasukkan 11 atribut fisikokimia produk minuman.
-2. **AI Risk Assessment**: Prediksi tingkat kualitas (*High Quality* vs *Standard Quality*) secara *real-time* berbasis probabilitas pemodelan.
-3. **Model Performance Insights**: Tab khusus untuk memvisualisasikan grafik performa model seperti Confusion Matrix, Kurva ROC-AUC, Feature Importance, dan Perkembangan 5x Eksperimen Tuning Parameter.
-4. **Laboratory Recommendation**: Rekomendasi teknis otomatis berbasis hasil uji fisikokimia (misal: jika kadar keasaman volatil terlalu tinggi atau kadar alkohol rendah).
-5. **Modern Premium Design**: Antarmuka pengguna (UI) bertema gelap (*Dark Mode*) dengan efek glassmorphism, warna harmonis, serta animasi responsif.
+Proyek Ujian Akhir Semester Genap TA 2025/2026 Universitas Amikom Yogyakarta.
 
 ---
 
-## 📊 Dataset & Model Machine Learning
-
-* **Dataset**: UCI Red Wine Quality Dataset (1.599 sampel data laboratorium).
-* **Fitur Prediksi (11 Atribut Fisikokimia)**: *Fixed Acidity, Volatile Acidity, Citric Acid, Residual Sugar, Chlorides, Free Sulfur Dioxide, Total Sulfur Dioxide, Density, pH, Sulphates,* dan *Alcohol*.
-* **Model yang Digunakan**: **Random Forest Classifier** dan **Support Vector Machine (SVM)** dengan 5x variasi eksperimen tuning hyperparameter.
-* **Performa Model Terbaik**: Random Forest mencapai **Akurasi 80.31%**, **F1-Score 81.31%**, dan **ROC-AUC 0.9038**.
-
----
-
-## 🛠️ Panduan Penggunaan & Instalasi
-
-### 1. Instalasi Dependensi
-Buka terminal pada direktori proyek ini dan jalankan perintah berikut:
-```bash
-pip install -r requirements.txt
-```
-
-### 2. Pelatihan & Evaluasi Model ML
-Jalankan file `train_model.py` untuk mengunduh dataset, memproses data, melatih model, dan meng-ekspor model terbaik (`wine_model.joblib`), `scaler.joblib`, serta grafik visualisasi ke folder `static/images/`:
-```bash
-python train_model.py
-```
-
-### 3. Menjalankan Aplikasi Web
-Jalankan server lokal Flask dengan perintah berikut:
-```bash
-python app.py
-```
-Setelah server aktif, buka browser dan akses alamat: **[http://127.0.0.1:5000](http://127.0.0.1:5000)**
-
----
-
-## 📁 Struktur Direktori Proyek
+## 📁 Struktur Folder Project
 
 ```text
-UAS_MACHINE_LEARNING/
-│
-├── static/
-│   ├── css/
-│   │   └── style.css                   # Stylesheet Glassmorphism & Dark Mode UI
-│   └── images/
-│       ├── confusion_matrix.png         # Grafik Confusion Matrix RF vs SVM
-│       ├── roc_curve.png                # Grafik Kurva ROC-AUC
-│       ├── feature_importance.png       # Grafik Atribut Paling Berpengaruh
-│       └── experiments_comparison.png   # Grafik Perkembangan 5x Tuning Parameter
-│
-├── templates/
-│   └── index.html                       # Dashboard Antarmuka Web Utama
-│
-├── app.py                               # Backend Flask Server & REST API
-├── train_model.py                       # Script Training & Export Model ML
-├── winequality-red.csv                  # Dataset UCI Red Wine Quality
-├── wine_model.joblib                    # Model Terpilih (Random Forest)
-├── scaler.joblib                        # Fitted StandardScaler
-├── model_info.txt                       # Catatan Performa Model Terpilih
-├── requirements.txt                     # Daftar Library Python yang Dipakai
-├── .gitignore                           # Git ignore configuration
-├── README.md                            # Dokumentasi Proyek Lengkap
-└── Tugas_UAS_Machine_Learning.ipynb     # Jupyter Notebook Google Colab
+TUGAS UAS/
+├── dataset/
+│   └── heart.csv                          # Dataset Medis Penyakit Jantung (UCI Cleveland / Kaggle)
+├── images/
+│   ├── confusion_matrices.png              # Confusion Matrix SVM vs XGBoost
+│   ├── feature_importance.png              # Tingkat Kepentingan Fitur Medis (XGBoost)
+│   ├── hyperparameter_tuning_experiments.png# Plot Progres 5x Tuning Hyperparameter
+│   └── roc_auc_curves.png                  # Kurva ROC-AUC Model Terbaik
+├── notebooks/
+│   └── Heart_Disease_Prediction_UAS.ipynb # Jupyter Notebook (Siap Diunggah ke Google Colab)
+├── results/
+│   └── experiment_results.csv             # Tabel Hasil Metrik Evaluasi 10 Eksperimen
+├── src/
+│   ├── train_and_evaluate.py               # Script Utama Pelatihan & Evaluasi 5x Tuning
+│   ├── predict_test.py                     # Script Testing Prediksi Interaktif / Demo
+│   └── generate_notebook.py                # Generator Notebook Colab
+├── Laporan_UAS_Machine_Learning_TK075.md  # Dokumen Laporan Final Project UAS
+└── f72581d1-d075-f111-8389-d0338df1818f_TK075_20260702114516.pdf # Soal & Ketentuan UAS
 ```
 
 ---
-© 2026 Universitas Amikom Yogyakarta | Program Studi Teknik Komputer
+
+## 🚀 Cara Menjalankan Pengujian (Testing)
+
+### 1. Uji Prediksi Pasien (Demo Testing Script)
+Jalankan perintah berikut di terminal untuk menguji prediksi model terbaik pada sampel rekam medis pasien:
+```bash
+python src/predict_test.py
+```
+
+### 2. Jalankan Ulang Seluruh Eksperimen (5x Tuning SVM & XGBoost)
+Untuk melatih ulang model dan memperbarui seluruh grafik visualisasi & tabel hasil:
+```bash
+python src/train_and_evaluate.py
+```
+
+### 3. Menggunakan Google Colab
+Unggah file `notebooks/Heart_Disease_Prediction_UAS.ipynb` ke [Google Colab](https://colab.research.google.com/) dan jalankan sel kode dari atas ke bawah.
