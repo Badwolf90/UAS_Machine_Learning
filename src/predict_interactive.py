@@ -47,7 +47,7 @@ def interactive_menu():
 
     while True:
         print("\n" + "="*55)
-        print("   INTERACTIVE MODEL TESTER - CARDIOPREDICT AI   ")
+        print("   INTERACTIVE MODEL TESTER - HEARTGUARD ML   ")
         print("="*55)
         print("1. Test Sampel Pasien 1 (Gejala Berat / Risiko Tinggi)")
         print("2. Test Sampel Pasien 2 (Kondisi Normal / Risiko Rendah)")

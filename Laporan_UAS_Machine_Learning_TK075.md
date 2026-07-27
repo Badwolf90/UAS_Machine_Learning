@@ -1,5 +1,5 @@
 # LAPORAN FINAL PROJECT MACHINE LEARNING (TK075)
-## DETEKSI DINI PENYAKIT JANTUNG MENGGUNAKAN SUPPORT VECTOR MACHINE (SVM) DAN XGBOOST CLASSIFIER DENGAN 5x EXPERIMENT HYPERPARAMETER TUNING
+## HEARTGUARD ML: DETEKSI DINI PENYAKIT JANTUNG MENGGUNAKAN SUPPORT VECTOR MACHINE (SVM) DAN XGBOOST CLASSIFIER DENGAN 5x EXPERIMENT HYPERPARAMETER TUNING
 
 ---
 
@@ -18,7 +18,7 @@
   5. Robert Marco, S.T., M.T., Ph.D.
 
 **Disusun Oleh Kelompok:**
-* **Judul Project:** Analisis Perbandingan Support Vector Machine (SVM) dan XGBoost Classifier dalam Deteksi Dini Penyakit Jantung berbasis Hyperparameter Tuning 5x Eksperimen
+* **Judul Project:** HeartGuard ML: Analisis Perbandingan Support Vector Machine (SVM) dan XGBoost Classifier dalam Deteksi Dini Penyakit Jantung berbasis Hyperparameter Tuning 5x Eksperimen
 * **Ketua / Anggota 1:** [Nama Anggota 1] - NIM: [NIM 1]
 * **Anggota 2:** [Nama Anggota 2] - NIM: [NIM 2]
 * **Anggota 3:** [Nama Anggota 3] - NIM: [NIM 3]

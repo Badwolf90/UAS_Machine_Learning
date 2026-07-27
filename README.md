@@ -1,4 +1,4 @@
-# UAS Machine Learning (TK075) - Deteksi Dini Penyakit Jantung (SVM vs XGBoost)
+# HeartGuard ML: Deteksi Dini Penyakit Jantung (SVM vs XGBoost)
 
 Proyek Ujian Akhir Semester Genap TA 2025/2026 Universitas Amikom Yogyakarta.
 
