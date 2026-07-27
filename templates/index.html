@@ -16,9 +16,8 @@
             <span>WineQuality AI</span>
         </div>
         <ul class="nav-links">
-            <li><a href="#" class="active" onclick="switchTab('predict')"><i class="fa-solid fa-flask"></i> Uji Prediksi</a></li>
-            <li><a href="#" onclick="switchTab('insights')"><i class="fa-solid fa-chart-line"></i> Insights Model</a></li>
-            <li><a href="#" onclick="switchTab('docs')"><i class="fa-solid fa-file-pdf"></i> Laporan UAS</a></li>
+            <li><a href="#" class="active" id="nav-predict" onclick="switchTab('predict')"><i class="fa-solid fa-flask"></i> Uji Prediksi</a></li>
+            <li><a href="#" id="nav-insights" onclick="switchTab('insights')"><i class="fa-solid fa-chart-line"></i> Insights Model</a></li>
         </ul>
     </nav>
 
@@ -37,9 +36,6 @@
             </button>
             <button class="tab-btn" id="btn-insights" onclick="switchTab('insights')">
                 <i class="fa-solid fa-chart-pie"></i> Visualisasi Evaluasi Model
-            </button>
-            <button class="tab-btn" id="btn-docs" onclick="switchTab('docs')">
-                <i class="fa-solid fa-download"></i> Unduh Laporan PDF & Code
             </button>
         </div>
 
@@ -135,33 +131,11 @@
             </div>
         </div>
 
-        <!-- TAB 3: DOCS & DOWNLOADS -->
-        <div id="tab-docs" class="tab-content">
-            <div class="glass-card">
-                <h2 class="card-title"><i class="fa-solid fa-folder-open"></i> Berkas & Laporan Tugas UAS</h2>
-                <p style="margin-bottom: 1.5rem; color: var(--text-muted);">Seluruh dokumen laporan dan kode sumber telah dibuat dan tersimpan di dalam repository GitHub:</p>
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.2rem;">
-                    <a href="https://github.com/Badwolf90/UAS_Machine_Learning/raw/main/Laporan_UAS_Machine_Learning.pdf" target="_blank" style="text-decoration:none; padding:1.2rem; background:rgba(239, 68, 68, 0.15); border:1px solid #ef4444; border-radius:12px; color:#ffffff; font-weight:700; display:flex; align-items:center; gap:0.8rem;">
-                        <i class="fa-solid fa-file-pdf" style="font-size:1.8rem; color:#ef4444;"></i> Unduh Laporan PDF Siap Cetak
-                    </a>
-                    <a href="https://github.com/Badwolf90/UAS_Machine_Learning/raw/main/Laporan_UAS_Machine_Learning.docx" target="_blank" style="text-decoration:none; padding:1.2rem; background:rgba(59, 130, 246, 0.15); border:1px solid #3b82f6; border-radius:12px; color:#ffffff; font-weight:700; display:flex; align-items:center; gap:0.8rem;">
-                        <i class="fa-solid fa-file-word" style="font-size:1.8rem; color:#3b82f6;"></i> Unduh Laporan Word (.docx)
-                    </a>
-                    <a href="https://github.com/Badwolf90/UAS_Machine_Learning/blob/main/Tugas_UAS_Machine_Learning.ipynb" target="_blank" style="text-decoration:none; padding:1.2rem; background:rgba(245, 158, 11, 0.15); border:1px solid #f59e0b; border-radius:12px; color:#ffffff; font-weight:700; display:flex; align-items:center; gap:0.8rem;">
-                        <i class="fa-solid fa-book-open" style="font-size:1.8rem; color:#f59e0b;"></i> Buka Notebook Colab (.ipynb)
-                    </a>
-                    <a href="https://github.com/Badwolf90/UAS_Machine_Learning" target="_blank" style="text-decoration:none; padding:1.2rem; background:rgba(168, 85, 247, 0.15); border:1px solid #a855f7; border-radius:12px; color:#ffffff; font-weight:700; display:flex; align-items:center; gap:0.8rem;">
-                        <i class="fa-brands fa-github" style="font-size:1.8rem; color:#a855f7;"></i> Lihat Repository GitHub Full Code
-                    </a>
-                </div>
-            </div>
-        </div>
-
     </div>
 
     <!-- FOOTER -->
     <footer>
-        <p>&copy; 2026 WineQuality AI | Final Project UAS Machine Learning (TK075) - Universitas Amikom Yogyakarta</p>
+        <p>&copy; 2026 WineQuality AI | Interactive Machine Learning Web Application</p>
     </footer>
 
     <!-- SCRIPT -->
@@ -169,9 +143,13 @@
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-links a').forEach(el => el.classList.remove('active'));
             
             document.getElementById('tab-' + tabId).classList.add('active');
             document.getElementById('btn-' + tabId).classList.add('active');
+            if(document.getElementById('nav-' + tabId)) {
+                document.getElementById('nav-' + tabId).classList.add('active');
+            }
         }
 
         async function handlePredict(e) {
