@@ -11,7 +11,16 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 models_dir = os.path.join(BASE_DIR, 'models')
 scaler = joblib.load(os.path.join(models_dir, 'scaler.joblib'))
 svm_model = joblib.load(os.path.join(models_dir, 'svm_model.joblib'))
-xgb_model = joblib.load(os.path.join(models_dir, 'xgb_model.joblib'))
+
+# Load XGBoost model from json if exists, otherwise joblib
+xgb_json_path = os.path.join(models_dir, 'xgb_model.json')
+xgb_joblib_path = os.path.join(models_dir, 'xgb_model.joblib')
+if os.path.exists(xgb_json_path):
+    import xgboost as xgb
+    xgb_model = xgb.XGBClassifier()
+    xgb_model.load_model(xgb_json_path)
+else:
+    xgb_model = joblib.load(xgb_joblib_path)
 
 @app.route('/')
 def index():
@@ -37,9 +46,8 @@ def predict():
         ca = float(data.get('ca', 0))
         thal = float(data.get('thal', 3))
 
-        feature_cols = ['age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal']
-        input_df = pd.DataFrame([[age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]], columns=feature_cols)
-        scaled_features = scaler.transform(input_df)
+        input_features = np.array([[age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]])
+        scaled_features = scaler.transform(input_features)
 
         # SVM Prediction
         svm_prob = float(svm_model.predict_proba(scaled_features)[0][1])
