@@ -17,16 +17,45 @@ if os.path.exists(params_path):
     scaler_scale = np.array(params['scaler_scale'])
     svm_coef = np.array(params['svm_coef'])
     svm_intercept = float(params['svm_intercept'])
-    use_json_params = True
 else:
-    use_json_params = False
+    scaler_mean = np.zeros(13)
+    scaler_scale = np.ones(13)
+    svm_coef = np.zeros(13)
+    svm_intercept = 0.0
 
-# Load XGBoost model
-import xgboost as xgb
-xgb_model = xgb.XGBClassifier()
+# Load XGBoost tree parameters from JSON
 xgb_json_path = os.path.join(models_dir, 'xgb_model.json')
+xgb_trees = []
+xgb_base_margin = 0.0
 if os.path.exists(xgb_json_path):
-    xgb_model.load_model(xgb_json_path)
+    with open(xgb_json_path, 'r') as f:
+        xgb_data = json.load(f)
+    xgb_trees = xgb_data['learner']['gradient_booster']['model']['trees']
+    base_s_str = xgb_data['learner']['learner_model_param']['base_score'].strip('[]')
+    base_s = float(base_s_str)
+    xgb_base_margin = float(np.log(base_s / (1.0 - base_s)))
+
+def predict_xgb_trees(scaled_row):
+    score = xgb_base_margin
+    for tree in xgb_trees:
+        lefts = tree['left_children']
+        rights = tree['right_children']
+        indices = tree['split_indices']
+        conds = tree['split_conditions']
+        weights = tree['base_weights']
+        defaults = tree['default_left']
+        node = 0
+        while lefts[node] != -1:
+            feat = indices[node]
+            val = scaled_row[feat]
+            if np.isnan(val):
+                node = lefts[node] if defaults[node] == 1 else rights[node]
+            elif val < conds[node]:
+                node = lefts[node]
+            else:
+                node = rights[node]
+        score += weights[node]
+    return float(1.0 / (1.0 + np.exp(-score)))
 
 @app.route('/')
 def index():
@@ -52,20 +81,16 @@ def predict():
         ca = float(data.get('ca', 0))
         thal = float(data.get('thal', 3))
 
-        input_features = np.array([[age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]])
-        
-        if use_json_params:
-            scaled_features = (input_features - scaler_mean) / scaler_scale
-            svm_df = np.dot(scaled_features, svm_coef) + svm_intercept
-            svm_prob = float(1 / (1 + np.exp(-svm_df[0])))
-        else:
-            scaled_features = input_features
-            svm_prob = 0.5
+        input_features = np.array([age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal])
+        scaled_features = (input_features - scaler_mean) / scaler_scale
 
+        # SVM Prediction via Decision Function
+        svm_df = np.dot(scaled_features, svm_coef) + svm_intercept
+        svm_prob = float(1.0 / (1.0 + np.exp(-svm_df)))
         svm_pred = int(svm_prob > 0.5)
 
-        # XGBoost Prediction
-        xgb_prob = float(xgb_model.predict_proba(scaled_features)[0][1])
+        # XGBoost Prediction via JSON Tree Evaluator
+        xgb_prob = predict_xgb_trees(scaled_features)
         xgb_pred = int(xgb_prob > 0.5)
 
         return jsonify({
