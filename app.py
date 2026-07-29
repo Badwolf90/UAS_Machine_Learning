@@ -1,26 +1,38 @@
 import os
-import joblib
+import json
 import numpy as np
-import pandas as pd
 from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 
-# Load trained models & scaler from models/ directory
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 models_dir = os.path.join(BASE_DIR, 'models')
-scaler = joblib.load(os.path.join(models_dir, 'scaler.joblib'))
-svm_model = joblib.load(os.path.join(models_dir, 'svm_model.joblib'))
 
-# Load XGBoost model from json if exists, otherwise joblib
+# Load parameters from JSON for ultra-fast serverless execution
+params_path = os.path.join(models_dir, 'model_params.json')
+if os.path.exists(params_path):
+    with open(params_path, 'r') as f:
+        params = json.load(f)
+    scaler_mean = np.array(params['scaler_mean'])
+    scaler_scale = np.array(params['scaler_scale'])
+    svm_coef = np.array(params['svm_coef'])
+    svm_intercept = float(params['svm_intercept'])
+    use_json_params = True
+else:
+    use_json_params = False
+    import joblib
+    scaler = joblib.load(os.path.join(models_dir, 'scaler.joblib'))
+    svm_model = joblib.load(os.path.join(models_dir, 'svm_model.joblib'))
+
+# Load XGBoost model
+import xgboost as xgb
+xgb_model = xgb.XGBClassifier()
 xgb_json_path = os.path.join(models_dir, 'xgb_model.json')
-xgb_joblib_path = os.path.join(models_dir, 'xgb_model.joblib')
 if os.path.exists(xgb_json_path):
-    import xgboost as xgb
-    xgb_model = xgb.XGBClassifier()
     xgb_model.load_model(xgb_json_path)
 else:
-    xgb_model = joblib.load(xgb_joblib_path)
+    import joblib
+    xgb_model = joblib.load(os.path.join(models_dir, 'xgb_model.joblib'))
 
 @app.route('/')
 def index():
@@ -47,10 +59,15 @@ def predict():
         thal = float(data.get('thal', 3))
 
         input_features = np.array([[age, sex, cp, trestbps, chol, fbs, restecg, thalach, exang, oldpeak, slope, ca, thal]])
-        scaled_features = scaler.transform(input_features)
+        
+        if use_json_params:
+            scaled_features = (input_features - scaler_mean) / scaler_scale
+            svm_df = np.dot(scaled_features, svm_coef) + svm_intercept
+            svm_prob = float(1 / (1 + np.exp(-svm_df[0])))
+        else:
+            scaled_features = scaler.transform(input_features)
+            svm_prob = float(svm_model.predict_proba(scaled_features)[0][1])
 
-        # SVM Prediction
-        svm_prob = float(svm_model.predict_proba(scaled_features)[0][1])
         svm_pred = int(svm_prob > 0.5)
 
         # XGBoost Prediction
