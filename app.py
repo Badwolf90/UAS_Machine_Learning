@@ -7,7 +7,8 @@ from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
 
 # Load trained models & scaler from models/ directory
-models_dir = 'models'
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+models_dir = os.path.join(BASE_DIR, 'models')
 scaler = joblib.load(os.path.join(models_dir, 'scaler.joblib'))
 svm_model = joblib.load(os.path.join(models_dir, 'svm_model.joblib'))
 xgb_model = joblib.load(os.path.join(models_dir, 'xgb_model.joblib'))
