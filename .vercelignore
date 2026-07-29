@@ -1,0 +1,9 @@
+docs/
+dataset/
+notebooks/
+results/
+src/
+*.pdf
+*.docx
+*.ipynb
+.git
