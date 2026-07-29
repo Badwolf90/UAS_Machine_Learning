@@ -20,9 +20,6 @@ if os.path.exists(params_path):
     use_json_params = True
 else:
     use_json_params = False
-    import joblib
-    scaler = joblib.load(os.path.join(models_dir, 'scaler.joblib'))
-    svm_model = joblib.load(os.path.join(models_dir, 'svm_model.joblib'))
 
 # Load XGBoost model
 import xgboost as xgb
@@ -30,9 +27,6 @@ xgb_model = xgb.XGBClassifier()
 xgb_json_path = os.path.join(models_dir, 'xgb_model.json')
 if os.path.exists(xgb_json_path):
     xgb_model.load_model(xgb_json_path)
-else:
-    import joblib
-    xgb_model = joblib.load(os.path.join(models_dir, 'xgb_model.joblib'))
 
 @app.route('/')
 def index():
@@ -65,8 +59,8 @@ def predict():
             svm_df = np.dot(scaled_features, svm_coef) + svm_intercept
             svm_prob = float(1 / (1 + np.exp(-svm_df[0])))
         else:
-            scaled_features = scaler.transform(input_features)
-            svm_prob = float(svm_model.predict_proba(scaled_features)[0][1])
+            scaled_features = input_features
+            svm_prob = 0.5
 
         svm_pred = int(svm_prob > 0.5)
 
